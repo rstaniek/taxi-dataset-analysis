@@ -15,6 +15,7 @@ class ProcessThread(threading.Thread):
         self.file = file
         self.callback = callback
         self.method = None
+        self.method_args = None
 
 
     def set_file(self, file):
@@ -40,9 +41,19 @@ class ProcessThread(threading.Thread):
         return self.name
 
 
+    @property
+    def method_args(self):
+        return self.method_args
+
+
     @method.setter
     def method(self, value):
         self.method = value
+
+
+    @method_args.setter
+    def method_args(self, **kwargs):
+        self.method_args = kwargs
 
 
     def run(self):
@@ -59,12 +70,13 @@ class ThreadManager:
 
     THREAD_CHECK_INTERVAL = 0.5
 
-    def __init__(self, files, method_to_invoke):
+    def __init__(self, files, method_to_invoke=None, method_args=None):
         self.CORE_COUNT = int(multiprocessing.cpu_count())
         self.avail_threads = list()
         self.working_threads = list()
         self.file_stack = files
         self.method_to_invoke = method_to_invoke
+        self.method_args = method_args
 
         for _i in range(self.CORE_COUNT):
             self.avail_threads.append(
@@ -82,6 +94,16 @@ class ThreadManager:
     @method_to_invoke.setter
     def method_to_invoke(self, value):
         self.method_to_invoke = value
+
+
+    @property
+    def method_args(self):
+        return self.method_args
+
+
+    @method_args.setter
+    def method_args(self, **kwargs):
+        self.method_args = kwargs
 
 
     @property
@@ -108,6 +130,7 @@ class ThreadManager:
         while len(self.avail_threads) > 0:
             thread = self.avail_threads.pop()
             thread.method = self.method_to_invoke
+            thread.method_args = self.method_args
             try:
                 #pop a file from a stack and assign it to a process
                 file = self.file_stack.pop()
