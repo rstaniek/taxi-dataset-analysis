@@ -32,33 +32,21 @@ class ProcessThread(threading.Thread):
 
 
     @property
-    def method(self):
-        return self.method
-
-
-    @property
     def name(self):
         return self.name
 
 
-    @property
-    def method_args(self):
-        return self.method_args
-
-
-    @method.setter
-    def method(self, value):
+    def method_set(self, value):
         self.method = value
 
 
-    @method_args.setter
-    def method_args(self, **kwargs):
+    def method_args_set(self, **kwargs):
         self.method_args = kwargs
 
 
     def run(self):
-        #TODO: to be implemented
-
+        #execute the injected method with a parameters passed as a dictionary
+        self.method(self.method_args)
         #when the work is done
         self.callback(self.threadID)
 
@@ -91,9 +79,8 @@ class ThreadManager:
         return self.method_to_invoke
 
 
-    @method_to_invoke.setter
-    def method_to_invoke(self, value):
-        self.method_to_invoke = value
+    def set_method_to_invoke(self, method):
+        self.method_to_invoke = method
 
 
     @property
@@ -101,8 +88,7 @@ class ThreadManager:
         return self.method_args
 
 
-    @method_args.setter
-    def method_args(self, **kwargs):
+    def set_method_args(self, **kwargs):
         self.method_args = kwargs
 
 
@@ -129,8 +115,8 @@ class ThreadManager:
         #while there are still threads available
         while len(self.avail_threads) > 0:
             thread = self.avail_threads.pop()
-            thread.method = self.method_to_invoke
-            thread.method_args = self.method_args
+            thread.method_set(self.method_to_invoke)
+            thread.method_args_set(self.method_args)
             try:
                 #pop a file from a stack and assign it to a process
                 file = self.file_stack.pop()
