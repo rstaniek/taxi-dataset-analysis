@@ -10,6 +10,8 @@ class DateSorter:
         else:
             pass
         df = pd.read_csv(path, sep=",")
+        out_path = '%s-{}.csv' % path[:path.find('.')]
+        out_path ='{}/by_quarter/{}'.format(out_path[:out_path.rfind('/')], out_path[out_path.rfind('/') + 1:])
 
         df['Pickup Centroid Location'] = df['Pickup Centroid Location'].astype(str)
         df['Dropoff Centroid  Location'] = df['Dropoff Centroid  Location'].astype(str)
@@ -57,30 +59,30 @@ class DateSorter:
         #!!!!!!!!!!!!!!!!!!!!!!!!!!
         #args['file'] = JUST THE FILENAME, NOT ENTIRE PATH, FIX THIS WHEN WE KNOW EVERYTHING WORKS, CAN BE EXCHANGED TO PATH VARIABLE
 
-        _2013firstQuarter.to_csv("2013firstQuarter" + args['file'] + '.csv', index=False)
-        _2013secondQuarter.to_csv("2013secondQuarter" + args['file'] + '.csv', index=False)
-        _2013thirdQuarter.to_csv("2013thirdQuarter" + args['file'] + '.csv', index=False)
-        _2013fourthQuarter.to_csv("2013fourthQuarter" + args['file'] + '.csv', index=False)
+        _2013firstQuarter.to_csv(out_path.format('2013Q1'), index=False)
+        _2013secondQuarter.to_csv(out_path.format('201Q2'), index=False)
+        _2013thirdQuarter.to_csv(out_path.format("2013Q3"), index=False)
+        _2013fourthQuarter.to_csv(out_path.format("2013Q4"), index=False)
 
-        _2014firstQuarter.to_csv("2014firstQuarter" + args['file'] + '.csv', index=False)
-        _2014secondQuarter.to_csv("2014secondQuarter" + args['file'] + '.csv', index=False)
-        _2014thirdQuarter.to_csv("2014thirdQuarter" + args['file'] + '.csv', index=False)
-        _2014fourthQuarter.to_csv("2014fourthQuarter" + args['file'] + '.csv', index=False)
+        _2014firstQuarter.to_csv(out_path.format("2014Q1"), index=False)
+        _2014secondQuarter.to_csv(out_path.format("2014Q2"), index=False)
+        _2014thirdQuarter.to_csv(out_path.format("2014Q3"), index=False)
+        _2014fourthQuarter.to_csv(out_path.format("2014Q4"), index=False)
 
-        _2015firstQuarter.to_csv("2015firstQuarter" + args['file'] + '.csv', index=False)
-        _2015secondQuarter.to_csv("2015secondQuarter" + args['file'] + '.csv', index=False)
-        _2015thirdQuarter.to_csv("2015thirdQuarter" + args['file'] + '.csv', index=False)
-        _2015fourthQuarter.to_csv("2015fourthQuarter" + args['file'] + '.csv', index=False)
+        _2015firstQuarter.to_csv(out_path.format("2015Q1"), index=False)
+        _2015secondQuarter.to_csv(out_path.format("2015Q2"), index=False)
+        _2015thirdQuarter.to_csv(out_path.format("2015Q3"), index=False)
+        _2015fourthQuarter.to_csv(out_path.format("2015Q4"), index=False)
 
-        _2016firstQuarter.to_csv("2016firstQuarter" + args['file'] + '.csv', index=False)
-        _2016secondQuarter.to_csv("2016secondQuarter" + args['file'] + '.csv', index=False)
-        _2016thirdQuarter.to_csv("2016thirdQuarter" + args['file'] + '.csv', index=False)
-        _2016fourthQuarter.to_csv("2016fourthQuarter" + args['file'] + '.csv', index=False)
+        _2016firstQuarter.to_csv(out_path.format("2016Q1"), index=False)
+        _2016secondQuarter.to_csv(out_path.format("2016Q2"), index=False)
+        _2016thirdQuarter.to_csv(out_path.format("2016Q3"), index=False)
+        _2016fourthQuarter.to_csv(out_path.format("2016Q4"), index=False)
 
-        _2017firstQuarter.to_csv("_2017firstQuarter" + args['file'] + '.csv', index=False)
-        _2017secondQuarter.to_csv("_2017secondQuarter" + args['file'] + '.csv', index=False)
-        _2017thirdQuarter.to_csv("_2017thirdQuarter" + args['file'] + '.csv', index=False)
-        _2017fourthQuarter.to_csv("_2017fourthQuarter" + args['file'] + '.csv', index=False)
+        _2017firstQuarter.to_csv(out_path.format("2017Q1"), index=False)
+        _2017secondQuarter.to_csv(out_path.format("2017Q2"), index=False)
+        _2017thirdQuarter.to_csv(out_path.format("2017Q3"), index=False)
+        _2017fourthQuarter.to_csv(out_path.format("2017Q4"), index=False)
 
 
 
