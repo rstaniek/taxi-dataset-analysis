@@ -32,14 +32,14 @@ class DateSorter:
 
         self.__log__('Reformating date formats... [{}]'.format(thread_name))
         start_time = time.time()
-        df['Trip Start Timestamp'] = df['Trip Start Timestamp'].apply(lambda x: dt.datetime.strptime(x, '%m/%d/%Y %I:%M:%S %p'))
-        df['Trip End Timestamp'] = df['Trip End Timestamp'].apply(lambda y: dt.datetime.strptime(y, '%m/%d/%Y %I:%M:%S %p'))
+        #df['Trip Start Timestamp'] = df['Trip Start Timestamp'].apply(lambda x: dt.datetime.strptime(x, '%m/%d/%Y %I:%M:%S %p'))
+        #df['Trip End Timestamp'] = df['Trip End Timestamp'].apply(lambda y: dt.datetime.strptime(y, '%m/%d/%Y %I:%M:%S %p'))
 
-        df['Trip Start Timestamp'] = df['Trip Start Timestamp'].apply(lambda a: dt.datetime.strftime(a, '%d/%m/%Y %I:%M:%S %p'))
-        df['Trip End Timestamp'] = df['Trip End Timestamp'].apply(lambda b: dt.datetime.strftime(b, '%d/%m/%Y %I:%M:%S %p'))
+        #df['Trip Start Timestamp'] = df['Trip Start Timestamp'].apply(lambda a: dt.datetime.strftime(a, '%d/%m/%Y %I:%M:%S %p'))
+        #df['Trip End Timestamp'] = df['Trip End Timestamp'].apply(lambda b: dt.datetime.strftime(b, '%d/%m/%Y %I:%M:%S %p'))
 
-        df['Trip Start Timestamp'] = pd.to_datetime(df['Trip Start Timestamp'])
-        df['Trip End Timestamp'] = pd.to_datetime(df['Trip End Timestamp'])
+        df['Trip Start Timestamp'] = pd.to_datetime(df['Trip Start Timestamp'], format = '%m/%d/%Y %I:%M:%S %p', dayfirst=True)
+        df['Trip End Timestamp'] = pd.to_datetime(df['Trip End Timestamp'], format = '%m/%d/%Y %I:%M:%S %p', dayfirst=True)
         elapsed_time = time.time() - start_time
         time_str = time.strftime('%H:%M:%S', time.gmtime(elapsed_time))
         self.__log__('Dates reformatted. Time elapsed: {} [{}]'.format(time_str, thread_name))

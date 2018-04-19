@@ -97,7 +97,7 @@ class ThreadManager:
     #sends back ID for further identification in the manager
     def __on_thread_finished__(self, id):
         #release a thread from the worker list and push it to idle list
-        thread = next(t for t in self.working_threads if id == t.id)
+        thread = next(t for t in self.working_threads if id == t.threadID)
         self.working_threads.remove(thread)
         self.avail_threads.append(thread)
         print('[{}] Thread #{} has exited its process\nTHREADS IDLE: {}\nTHREADS ACTIVE: {}\nTasks left: {}'.format(str(datetime.now()), id, len(self.avail_threads), len(self.working_threads), self.task_count))
