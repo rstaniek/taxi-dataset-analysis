@@ -7,10 +7,14 @@ def main():
     files = glob.glob('C:/Users/rajmu/Desktop/taxi-split/corrected/*.csv')
     for _i in range(len(files)):
         files[_i] = files[_i].replace('\\','/')
+
+    #debug
+    files = files[:2]
     
     #initialize thread managet
     manager = tm.ThreadManager(files)
-    manager.set_method_to_invoke(DateSorter.split)
+    sort = DateSorter()
+    manager.set_method_to_invoke(sort.split)
     manager.run()
 
 if __name__ == "__main__":

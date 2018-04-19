@@ -3,8 +3,6 @@ import datetime as dt
 
 
 class DateSorter:
-    #This part MIGHT be fked as we dont know how the args are passed but the logic is kinda json-y and self explanatory
-    @staticmethod
     def split(self, args):
         if args['file'] != "":
             path = args['file']
@@ -57,8 +55,6 @@ class DateSorter:
         _2017fourthQuarter = df[(df['Quarter'] == 4) & (df['Year'] == 2017)]
 
         #Output to files
-        #!!!!!!!!!!!!!!!!!!!!!!!!!!
-        #args['file'] = JUST THE FILENAME, NOT ENTIRE PATH, FIX THIS WHEN WE KNOW EVERYTHING WORKS, CAN BE EXCHANGED TO PATH VARIABLE
 
         _2013firstQuarter.to_csv(out_path.format('2013Q1'), index=False)
         _2013secondQuarter.to_csv(out_path.format('201Q2'), index=False)

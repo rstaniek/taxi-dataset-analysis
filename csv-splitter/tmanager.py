@@ -2,6 +2,7 @@ import threading
 import multiprocessing
 import numpy as np
 import time
+from datetime import datetime
 
 
 class ThreadRunException(Exception):
@@ -88,7 +89,7 @@ class ThreadManager:
 
 
     def __str__(self):
-        return 'ThreadManager class: {}\nThread count: {}\nTasks to process: {}'.format(self.__repr__, self.CORE_COUNT, len(self.file_stack))
+        return '[{}] Process running...\nThread count: {}\nThreads active: {}\nTasks to process: {}'.format(str(datetime.now()), self.CORE_COUNT, len(self.working_threads), self.task_count)
 
 
     #a callback invoked when a certain thread is finished with its tasks.
@@ -98,14 +99,14 @@ class ThreadManager:
         thread = next(t for t in self.working_threads if id == t.id)
         self.working_threads.remove(thread)
         self.avail_threads.append(thread)
-        print('Thread #{} has exited its process\nTHREADS IDLE: {}\nTHREADS ACTIVE: {}'.format(id, len(self.avail_threads), len(self.working_threads)))
+        print('[{}] Thread #{} has exited its process\nTHREADS IDLE: {}\nTHREADS ACTIVE: {}\nTasks left: {}'.format(str(datetime.now()), id, len(self.avail_threads), len(self.working_threads), self.task_count))
 
 
     def __assign_tasks__(self):
         #while there are still files on the stack
         if len(self.file_stack) > 0:
             #while there are still threads available
-            while len(self.avail_threads) > 0:
+            while len(self.avail_threads) > 0 and self.task_count > 0:
                 thread = self.avail_threads.pop()
                 thread.method_set(self.method_to_invoke)
                 thread.method_args_set(self.method_args)
@@ -125,11 +126,16 @@ class ThreadManager:
     def run(self):
         #run a loop until we processed all the requests
         while self.task_count > 0:
+            #print info status
+            if int(datetime.now().strftime('%S')) % 2 == 0:
+                print(self.__str__())
             time.sleep(ThreadManager.THREAD_CHECK_INTERVAL)
             #assign tasks to the lazy idle bastards
             self.__assign_tasks__()
         print('All tasks have been assigned')
         while len(self.working_threads) > 0:
             time.sleep(ThreadManager.THREAD_CHECK_INTERVAL)
+            if int(datetime.now().strftime('%S')) % 10 == 0:
+                print(self.__str__())
         print('All threads have finished')
             
