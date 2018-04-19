@@ -4,6 +4,7 @@ import datetime as dt
 
 class DateSorter:
     #This part MIGHT be fked as we dont know how the args are passed but the logic is kinda json-y and self explanatory
+    @staticmethod
     def split(self, args):
         if args['file'] != "":
             path = args['file']

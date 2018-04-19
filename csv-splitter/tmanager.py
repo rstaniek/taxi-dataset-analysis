@@ -1,4 +1,7 @@
 import threading
+import multiprocessing
+import numpy as np
+import time
 
 
 class ThreadRunException(Exception):
@@ -26,25 +29,18 @@ class ProcessThread(threading.Thread):
             raise ThreadRunException('Thread is currently running! Cannot change the source file.', self.name)
 
 
-    @property
-    def id(self):
-        return self.threadID
-
-
-    @property
-    def name(self):
-        return self.name
-
-
     def method_set(self, value):
         self.method = value
 
 
-    def method_args_set(self, **kwargs):
+    def method_args_set(self, kwargs):
         self.method_args = kwargs
 
 
     def run(self):
+        if self.method_args is None:
+            self.method_args = dict()
+        self.method_args['file'] = self.file
         #execute the injected method with a parameters passed as a dictionary
         self.method(self.method_args)
         #when the work is done
@@ -52,19 +48,21 @@ class ProcessThread(threading.Thread):
 
 
 class ThreadManager:
-    import multiprocessing
-    import numpy as np
-    import time
 
     THREAD_CHECK_INTERVAL = 0.5
 
     def __init__(self, files, method_to_invoke=None, method_args=None):
+        print('Initliailzing thread manager...')
         self.CORE_COUNT = int(multiprocessing.cpu_count())
         self.avail_threads = list()
         self.working_threads = list()
         self.file_stack = files
         self.method_to_invoke = method_to_invoke
-        self.method_args = method_args
+        if method_args is None:
+            self.method_args = dict()
+        else:
+            self.method_args = method_args
+        #self.method_args['files'] = self.file_stack
 
         for _i in range(self.CORE_COUNT):
             self.avail_threads.append(
@@ -72,23 +70,15 @@ class ThreadManager:
                               'processThread-%d' % _i, 
                               None, 
                               self.__on_thread_finished__))
+        print('Thread Manager initialized.')
 
-
-    @property
-    def method_to_invoke(self):
-        return self.method_to_invoke
 
 
     def set_method_to_invoke(self, method):
         self.method_to_invoke = method
 
 
-    @property
-    def method_args(self):
-        return self.method_args
-
-
-    def set_method_args(self, **kwargs):
+    def set_method_args(self, kwargs):
         self.method_args = kwargs
 
 
@@ -112,22 +102,24 @@ class ThreadManager:
 
 
     def __assign_tasks__(self):
-        #while there are still threads available
-        while len(self.avail_threads) > 0:
-            thread = self.avail_threads.pop()
-            thread.method_set(self.method_to_invoke)
-            thread.method_args_set(self.method_args)
-            try:
-                #pop a file from a stack and assign it to a process
-                file = self.file_stack.pop()
-                thread.set_file(file)
-                print('File {} assigned to thread: {}'.format(file, thread.name))
-            except ThreadRunException as ex:
-                print(ex)
-            #start the thread
-            thread.start()
-            #add it to the list of working threads
-            self.working_threads.append(thread)
+        #while there are still files on the stack
+        if len(self.file_stack) > 0:
+            #while there are still threads available
+            while len(self.avail_threads) > 0:
+                thread = self.avail_threads.pop()
+                thread.method_set(self.method_to_invoke)
+                thread.method_args_set(self.method_args)
+                try:
+                    #pop a file from a stack and assign it to a process
+                    file = self.file_stack.pop()
+                    thread.set_file(file)
+                    print('File {} assigned to thread: {}'.format(file, thread.name))
+                except ThreadRunException as ex:
+                    print(ex)
+                #start the thread
+                thread.start()
+                #add it to the list of working threads
+                self.working_threads.append(thread)
 
 
     def run(self):
