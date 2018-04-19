@@ -1,21 +1,35 @@
 import pandas as pd
 import datetime as dt
+from datetime import datetime
 
 
 class DateSorter:
+    def __log__(self, message):
+        print('[{}] (Sorter) {}'.format(str(datetime.now()), str(message)))
+
+
     def split(self, args):
         if args['file'] != "":
             path = args['file']
         else:
             pass
+        if args['thread'] != "":
+            thread_name = args['thread']
+
+        self.__log__('Loading data frame {} on {}'.format(path, thread_name))
         df = pd.read_csv(path, sep=",")
         out_path = '%s-{}.csv' % path[:path.find('.')]
         out_path ='{}/by_quarter/{}'.format(out_path[:out_path.rfind('/')], out_path[out_path.rfind('/') + 1:])
+        self.__log__('Data frame loaded. [{}]'.format(thread_name))
 
+        self.__log__('Deleting rows without location data... [{}]'.format(thread_name))
         df['Pickup Centroid Location'] = df['Pickup Centroid Location'].astype(str)
         df['Dropoff Centroid  Location'] = df['Dropoff Centroid  Location'].astype(str)
         df = df[df['Pickup Centroid Location'] != 'nan']
         df = df[df['Dropoff Centroid  Location'] != 'nan']
+        self.__log__('Non location data deleted. [{}]'.format(thread_name))
+
+        self.__log__('Reformating date formats... [{}]'.format(thread_name))
         df['Trip Start Timestamp'] = df['Trip Start Timestamp'].apply(lambda x: dt.datetime.strptime(x, '%m/%d/%Y %I:%M:%S %p'))
         df['Trip End Timestamp'] = df['Trip End Timestamp'].apply(lambda y: dt.datetime.strptime(y, '%m/%d/%Y %I:%M:%S %p'))
 
@@ -24,7 +38,9 @@ class DateSorter:
 
         df['Trip Start Timestamp'] = pd.to_datetime(df['Trip Start Timestamp'])
         df['Trip End Timestamp'] = pd.to_datetime(df['Trip End Timestamp'])
+        self.__log__('Dates reformatted. [{}]'.format(thread_name))
 
+        self.__log__('Preparing to save output... [{}]'.format(thread_name))
         df.sort_values(by=['Trip Start Timestamp'], inplace=True)
         df['Quarter'] = df['Trip Start Timestamp'].dt.quarter
         df['Year'] = df['Trip Start Timestamp'].dt.year
@@ -56,6 +72,7 @@ class DateSorter:
 
         #Output to files
 
+        self.__log__('Saving data to template: {} [{}]'.format(out_path, thread_name))
         _2013firstQuarter.to_csv(out_path.format('2013Q1'), index=False)
         _2013secondQuarter.to_csv(out_path.format('201Q2'), index=False)
         _2013thirdQuarter.to_csv(out_path.format("2013Q3"), index=False)
@@ -80,6 +97,7 @@ class DateSorter:
         _2017secondQuarter.to_csv(out_path.format("2017Q2"), index=False)
         _2017thirdQuarter.to_csv(out_path.format("2017Q3"), index=False)
         _2017fourthQuarter.to_csv(out_path.format("2017Q4"), index=False)
+        self.__log__('Data saved! [{}]'.format(thread_name))
 
 
 

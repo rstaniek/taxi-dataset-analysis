@@ -42,6 +42,7 @@ class ProcessThread(threading.Thread):
         if self.method_args is None:
             self.method_args = dict()
         self.method_args['file'] = self.file
+        self.method_args['thread'] = self.name
         #execute the injected method with a parameters passed as a dictionary
         self.method(self.method_args)
         #when the work is done
@@ -127,7 +128,7 @@ class ThreadManager:
         #run a loop until we processed all the requests
         while self.task_count > 0:
             #print info status
-            if int(datetime.now().strftime('%S')) % 2 == 0:
+            if int(datetime.now().strftime('%S')) % 30 == 0:
                 print(self.__str__())
             time.sleep(ThreadManager.THREAD_CHECK_INTERVAL)
             #assign tasks to the lazy idle bastards
@@ -135,7 +136,5 @@ class ThreadManager:
         print('All tasks have been assigned')
         while len(self.working_threads) > 0:
             time.sleep(ThreadManager.THREAD_CHECK_INTERVAL)
-            if int(datetime.now().strftime('%S')) % 10 == 0:
-                print(self.__str__())
         print('All threads have finished')
             
