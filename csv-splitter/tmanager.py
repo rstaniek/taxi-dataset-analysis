@@ -128,13 +128,15 @@ class ThreadManager:
         #run a loop until we processed all the requests
         while self.task_count > 0:
             #print info status
-            if int(datetime.now().strftime('%S')) % 30 == 0:
-                print(self.__str__())
+            #if int(datetime.now().strftime('%S')) % 30 == 0:
+                #print(self.__str__())
             time.sleep(ThreadManager.THREAD_CHECK_INTERVAL)
             #assign tasks to the lazy idle bastards
             self.__assign_tasks__()
         print('All tasks have been assigned')
+        print(self.__str__())
         while len(self.working_threads) > 0:
             time.sleep(ThreadManager.THREAD_CHECK_INTERVAL)
         print('All threads have finished')
+        print(self.__str__())
             
