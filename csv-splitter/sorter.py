@@ -1,6 +1,7 @@
 import pandas as pd
 import datetime as dt
 from datetime import datetime
+import time
 
 
 class DateSorter:
@@ -30,6 +31,7 @@ class DateSorter:
         self.__log__('Non location data deleted. [{}]'.format(thread_name))
 
         self.__log__('Reformating date formats... [{}]'.format(thread_name))
+        start_time = time.time()
         df['Trip Start Timestamp'] = df['Trip Start Timestamp'].apply(lambda x: dt.datetime.strptime(x, '%m/%d/%Y %I:%M:%S %p'))
         df['Trip End Timestamp'] = df['Trip End Timestamp'].apply(lambda y: dt.datetime.strptime(y, '%m/%d/%Y %I:%M:%S %p'))
 
@@ -38,7 +40,9 @@ class DateSorter:
 
         df['Trip Start Timestamp'] = pd.to_datetime(df['Trip Start Timestamp'])
         df['Trip End Timestamp'] = pd.to_datetime(df['Trip End Timestamp'])
-        self.__log__('Dates reformatted. [{}]'.format(thread_name))
+        elapsed_time = time.time() - start_time
+        time_str = time.strftime('%H:%M:%S', time.gmtime(elapsed_time))
+        self.__log__('Dates reformatted. Time elapsed: {} [{}]'.format(time_str, thread_name))
 
         self.__log__('Preparing to save output... [{}]'.format(thread_name))
         df.sort_values(by=['Trip Start Timestamp'], inplace=True)
