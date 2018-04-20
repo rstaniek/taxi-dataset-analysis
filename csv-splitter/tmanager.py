@@ -53,13 +53,20 @@ class ThreadManager:
 
     THREAD_CHECK_INTERVAL = 0.5
 
-    def __init__(self, files, method_to_invoke=None, method_args=None):
+    def __init__(self, files, method_to_invoke=None, method_args=None, core_c=None, iterable_args=None):
         print('Initliailzing thread manager...')
-        self.CORE_COUNT = int(multiprocessing.cpu_count())
+        if core_c is None:
+            self.CORE_COUNT = int(multiprocessing.cpu_count())
+        else:
+            self.CORE_COUNT = core_c
         self.avail_threads = list()
         self.working_threads = list()
         self.file_stack = files
         self.method_to_invoke = method_to_invoke
+        if iterable_args is None:
+            self.iterable_args = None
+        else:
+            self.iterable_args = iterable_args
         if method_args is None:
             self.method_args = dict()
         else:
@@ -82,6 +89,10 @@ class ThreadManager:
 
     def set_method_args(self, kwargs):
         self.method_args = kwargs
+
+
+    def set_iterable_args(self, args):
+        self.iterable_args = args
 
 
     @property
@@ -112,6 +123,9 @@ class ThreadManager:
             while len(self.avail_threads) > 0 and self.task_count > 0:
                 thread = self.avail_threads.pop()
                 thread.method_set(self.method_to_invoke)
+                if self.iterable_args is not None:
+                    arg = self.iterable_args.pop()
+                    self.method_args['iterable'] = arg
                 thread.method_args_set(self.method_args)
                 try:
                     #pop a file from a stack and assign it to a process

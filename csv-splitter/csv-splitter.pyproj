@@ -30,6 +30,9 @@
     <Compile Include="main.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="merger.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="splitter.py">
       <SubType>Code</SubType>
     </Compile>

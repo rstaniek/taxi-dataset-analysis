@@ -1,8 +1,9 @@
 import tmanager as tm
 from sorter import DateSorter
 import glob
+from merger import ReMerger
 
-def main():
+def split():
     #Fetch a list of files from a directory
     files = glob.glob('C:/Users/rajmu/Desktop/taxi-split/corrected/*.csv')
     for _i in range(len(files)):
@@ -15,6 +16,31 @@ def main():
     manager.run()
 
 
+def merge():
+    path = 'C:/Users/rajmu/Desktop/taxi-split/corrected/by_quarter/*.csv'
+    files = list()
+    for _ in range(20):
+        files.append(path)
+
+    manager = tm.ThreadManager(files, core_c=8)
+    merger = ReMerger()
+    manager.set_method_to_invoke(merger.merger)
+
+    args = list()
+    year = 2013
+    q = 1
+    for _i in range(20):
+        args.append('{}-{}'.format(str(year), str(q)))
+        q += 1
+        if _i + 1 % 4 == 0:
+            year += 1
+            q = 1
+    manager.set_iterable_args(args)
+    manager.run()
+        
+
+
+
 def test():
 
     #debug
@@ -25,5 +51,5 @@ def test():
     sort.split(args)
 
 if __name__ == "__main__":
-    main()
+    merge()
     #test()
