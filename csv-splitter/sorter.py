@@ -78,7 +78,7 @@ class DateSorter:
 
         self.__log__('Saving data to template: {} [{}]'.format(out_path, thread_name))
         _2013firstQuarter.to_csv(out_path.format('2013Q1'), index=False)
-        _2013secondQuarter.to_csv(out_path.format('201Q2'), index=False)
+        _2013secondQuarter.to_csv(out_path.format('2013Q2'), index=False)
         _2013thirdQuarter.to_csv(out_path.format("2013Q3"), index=False)
         _2013fourthQuarter.to_csv(out_path.format("2013Q4"), index=False)
 
