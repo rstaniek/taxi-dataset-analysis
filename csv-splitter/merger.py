@@ -22,18 +22,22 @@ class ReMerger:
             thread_name = args['thread']
         else:
             pass
-        path = args['file']
+        files = args['file']
         
         #Folder will probably have to be changed to the one that holds the 1920 files
-        files = glob.glob(path)
+        #files = glob.glob(path)
         #year = args['year']
         #quarter = args['quarter']
-        it = args['iterable']
-        year = int(it[:it.find('-')])
-        quarter = int(it[it.find('-') + 1:])
+        #it = args['iterable']
+        #year = #int(it[:it.find('-')])
+        #quarter = #int(it[it.find('-') + 1:])
 
-        out_path = '%s-{}.csv' % path[:path.find('.')]
+        out_path = '%s-{}.csv' % files[0][:files[0].find('.')]
         out_path ='{}/merged/{}'.format(out_path[:out_path.rfind('/')], out_path[out_path.rfind('/') + 1:])
+        #out_path = out_path.replace('-','')
+        year = int(out_path[out_path.rfind('-') - 6:out_path.rfind('-') - 2])
+        quarter = int(out_path[out_path.rfind('-') - 1:out_path.rfind('-')])
+        out_path = ('%s/{}.csv' % out_path[:out_path.rfind('/')]).format('Taxi-merged-{}Q{}'.format(year, quarter))
         
         #Creation of the dataframe that's going to hold the final data
         df = pd.DataFrame()
@@ -53,22 +57,22 @@ class ReMerger:
         time_str = time.strftime('%H:%M:%S', time.gmtime(elapsed_time))
         self.__log__('Dates appended. Time elapsed: {} [{}]'.format(time_str, thread_name))
 
-        df = df[df['Trip Start Timestamp'] is not np.NaN]
+        #df = df[df['Trip Start Timestamp'] is not np.NaN]
         
         
         #Sorting of dataframe by ¨Trip Start Timestamp¨
-        self.__log__('Starting sorting the final dataframe... [{}]'.format(thread_name))
-        start_time = time.time()
+        #self.__log__('Starting sorting the final dataframe... [{}]'.format(thread_name))
+        #start_time = time.time()
         
-        df.sort_values(by=['Trip Start Timestamp'], inplace=True)
+        #df.sort_values(by=['Trip Start Timestamp'], inplace=True)
         
-        elapsed_time = time.time() - start_time
-        time_str = time.strftime('%H:%M:%S', time.gmtime(elapsed_time))
-        self.__log__('Completed sorting. Time elapsed: {} [{}]'.format(time_str, thread_name))
+        #elapsed_time = time.time() - start_time
+        #time_str = time.strftime('%H:%M:%S', time.gmtime(elapsed_time))
+        #self.__log__('Completed sorting. Time elapsed: {} [{}]'.format(time_str, thread_name))
         
         #Deletion of first column, auto generated index
-        del df[0]
+        
         
         #Saving of the output final quarter&year file
-        df.to_csv(str(out_path.format("Final" + str(year) + "Q" + str(quarter))), index = False)
-        self.__log__('Data saved! [{}]'.format(thread_name))
+        df.to_csv(out_path, index = False)
+        self.__log__('Data saved to : {} ! [{}]'.format(out_path, thread_name))

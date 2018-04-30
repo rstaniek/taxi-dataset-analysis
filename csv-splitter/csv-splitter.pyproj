@@ -4,7 +4,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>a4975410-b740-4a1a-9a8e-baa2f1a7455a</ProjectGuid>
     <ProjectHome>.</ProjectHome>
-    <StartupFile>main.py</StartupFile>
+    <StartupFile>distance_calc.py</StartupFile>
     <SearchPath>
     </SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
@@ -21,7 +21,13 @@
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="datasets.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="dcleaner.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="distance_calc.py">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="dview.py">
