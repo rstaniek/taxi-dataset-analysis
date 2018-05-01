@@ -24,7 +24,12 @@ class Importer(object):
 
 
     def model_taxi(self, header, row):
-        pass
+        trip_id = row[header.index('Trip ID')]
+        date = row[header.index('Trip Start Timestamp')]
+        area = row[header.index('Pickup Community Area')]
+        latt = row[header.index('Pickup Centroid Latitude')]
+        long = row[header.index('Pickup Centroid Longitude')]
+        return TaxiTrip(trip_id, date, area, latt, long)
 
 
     def import_crime(self, path):
@@ -54,9 +59,13 @@ class Importer(object):
             raise ValueError('Invalid path!')
         with open(path) as file:
             print('loading csv...')
-            reader = csv.reader(file)
+            reader = csv.reader(file, delimiter=';', quotechar='"')
 
-            header = next(reader)
+            head = next(reader)
+            head[0] = 'Trip ID'
+            header =list()
+            for element in head:
+                header.append(element.replace('`',' '))
             data = [x for x in reader]
             row_count = len(data)
             print('Loading completed. {} lines'.format(row_count))
@@ -210,14 +219,4 @@ class Distance(object):
 
         return final_taxi
 
-
-def main():
-    importer = Importer()
-    path = 'C:/Users/rajmu/Desktop/project-4/cleaned/taxi-2017Q3.csv'
-    taxis = importer.import_taxi(path)
-    print('imported {} rows'.format(len(taxis)))
-    print(taxis[0].tripStartTimestamp)
-
-if __name__ == "__main__":
-    main()
 
