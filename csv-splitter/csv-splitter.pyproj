@@ -39,6 +39,9 @@
     <Compile Include="merger.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="sorter.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="splitter.py">
       <SubType>Code</SubType>
     </Compile>
