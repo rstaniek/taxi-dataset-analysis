@@ -217,6 +217,6 @@ class Distance(object):
                     if self.get_distance(crime, taxi) < Distance.MAX_DISTANCE:
                         final_taxi.append(taxi.trip_id)
 
-        return final_taxi
+        return {crime.id: final_taxi}
 
 
