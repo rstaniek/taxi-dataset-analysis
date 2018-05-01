@@ -13,7 +13,7 @@ class Coordinate(object):
 class TaxiTrip(Coordinate):
 
     def __init__(self, tripID, tripStartTImestamp, pickupCommunityArea, lattitude, longitude):
-        self.tripID = tripID
+        self.trip_id = tripID
         self.tripStartTimestamp = tripStartTImestamp
         self.pickupCommunityArea = pickupCommunityArea
         super(TaxiTrip, self).__init__(lattitude, longitude)

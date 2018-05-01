@@ -4,6 +4,7 @@ from tmanager import ThreadManager
 from progress.bar import IncrementalBar
 import csv
 import math
+import datetime
 
 class Importer(object):
 
@@ -152,6 +153,10 @@ class Distance(object):
 	            76: [76,9,10,17],
 	            77: [77,1,2,3,4]}
 
+    def __init__(self, start_days, stop_days):
+        self.start_days = start_days #string timestamp 'h1', 'd3'
+        self.stop_days = stop_days
+
 
     @property
     def MAX_DISTANCE(self):
@@ -182,13 +187,37 @@ class Distance(object):
 
 
 
-    def taxis_in_area(self, community, crime):
+    def taxis_in_area(self, community, crime, taxi_list):
         pass
 
 
-    def get_taxis_per_crime(self, crime):
+    def get_taxis_per_crime(self, crime, taxi_list):
         taxi_l = list()
-        for neighbour in self.get_neighbours(crime.community_area):
-            result = self.taxis_in_area(neighbour, crime)
-            for _r in result:
-                taxi_l.append(_r)
+
+        #first narrow down taxi list to certain date period
+        crime_time = datetime.datetime.strptime(crime.date, '%d/%m/%Y %H:%M:%S')
+        date_start = crime_time - datetime.timedelta(hours=1)
+        date_end = crime_time + datetime.timedelta(hours=1)
+        final_taxi = list()
+
+        #iterate through a taxi list
+        for taxi in taxi_list:
+            taxi_date = datetime.datetime.strptime(taxi.tripStartTimestamp, '%d-%m-%Y %H:%M:%S')
+            if taxi_date > date_start and taxi_date < date_end:
+                if int(taxi.pickupCommunityArea) in self.get_neighbours(crime.community_area):
+                    if self.get_distance(crime, taxi) < Distance.MAX_DISTANCE:
+                        final_taxi.append(taxi.trip_id)
+
+        return final_taxi
+
+
+def main():
+    importer = Importer()
+    path = 'C:/Users/rajmu/Desktop/project-4/cleaned/taxi-2017Q3.csv'
+    taxis = importer.import_taxi(path)
+    print('imported {} rows'.format(len(taxis)))
+    print(taxis[0].tripStartTimestamp)
+
+if __name__ == "__main__":
+    main()
+
