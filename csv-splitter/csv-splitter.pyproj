@@ -4,7 +4,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>a4975410-b740-4a1a-9a8e-baa2f1a7455a</ProjectGuid>
     <ProjectHome>.</ProjectHome>
-    <StartupFile>distance_calc.py</StartupFile>
+    <StartupFile>main.py</StartupFile>
     <SearchPath>
     </SearchPath>
     <WorkingDirectory>.</WorkingDirectory>

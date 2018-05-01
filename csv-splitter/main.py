@@ -2,6 +2,7 @@ import tmanager as tm
 from sorter import DateSorter
 import glob
 from merger import ReMerger
+from distance_calc import Importer, Distance
 
 def split():
     #Fetch a list of files from a directory
@@ -53,6 +54,20 @@ def test():
     args['thread'] = 'main-1'
     sort.split(args)
 
+
+def correlate():
+    path_to_taxi = 'C:/Users/rajmu/Desktop/project-4/cleaned/taxi-2017Q3.csv'
+    path_to_crime = 'C:/Users/rajmu/Desktop/project-4/crime_dataset.csv'
+    csvlink = Importer()
+    crimes = csvlink.model_crime(path_to_crime)
+    taxis = csvlink.import_taxi(path_to_taxi)
+    dist = Distance(1,1)
+    for x in range(3):
+        print(dist.get_taxis_per_crime(crimes[x], taxis))
+
+    
+
 if __name__ == "__main__":
-    merge()
+    #merge()
     #test()
+    correlate()

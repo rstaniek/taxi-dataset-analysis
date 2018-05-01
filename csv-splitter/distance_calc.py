@@ -36,7 +36,7 @@ class Importer(object):
         if path == '' or path is None:
             raise ValueError('Invalid path!')
         with open(path) as file:
-            print('loading csv...')
+            print('loading crime csv...')
             reader = csv.reader(file)
 
             header = next(reader)
@@ -58,7 +58,7 @@ class Importer(object):
         if path == '' or path is None:
             raise ValueError('Invalid path!')
         with open(path) as file:
-            print('loading csv...')
+            print('loading taxi csv...')
             reader = csv.reader(file, delimiter=';', quotechar='"')
 
             head = next(reader)
@@ -193,11 +193,6 @@ class Distance(object):
         c = 2 * math.atan2(math.sqrt(a), math.sqrt(1-a))
         d = R * c
         return d
-
-
-
-    def taxis_in_area(self, community, crime, taxi_list):
-        pass
 
 
     def get_taxis_per_crime(self, crime, taxi_list):
