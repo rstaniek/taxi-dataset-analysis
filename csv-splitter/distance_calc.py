@@ -111,9 +111,8 @@ class Importer(object):
 
 
 class Distance(object):
-    @property
-    def neighbours(self):
-        return {1: [1,2,4,77],
+
+    neighbours = {1: [1,2,4,77],
                 2: [2,1,13,14,77],
                 3: [3,4,5,6,77],
                 4: [4,2,3,5,13,14,16],
@@ -196,9 +195,8 @@ class Distance(object):
         self.stop_days = stop_days
 
 
-    @property
     def MAX_DISTANCE(self):
-        return 1.5 #km
+        return float(1.5) #km
 
 
     def get_neighbours(self, community):
@@ -211,10 +209,10 @@ class Distance(object):
 
     #calculates the distance between 2 objects
     def get_distance(self, crime, taxi):
-        x1 = crime.point['x']
-        y1 = crime.point['y']
-        x2 = taxi.point['x']
-        y2 = taxi.point['y']
+        x1 = float(crime.point['x'])
+        y1 = float(crime.point['y'])
+        x2 = float(taxi.point['x'])
+        y2 = float(taxi.point['y'])
         dx = Distance.to_rad(x2-x1)
         dy = Distance.to_rad(y2-y1)
         R = 6371
@@ -258,7 +256,7 @@ class Distance(object):
             if taxi_date > date_start and taxi_date < date_end:
                 neeeigh = Distance.neighbours[crime.community_area]
                 if int(taxi.pickupCommunityArea) in neeeigh:
-                    if self.get_distance(crime, taxi) < Distance.MAX_DISTANCE:
+                    if self.get_distance(crime, taxi) < self.MAX_DISTANCE():
                         final_taxi.append(taxi.trip_id)
 
         return {crime.id: final_taxi}

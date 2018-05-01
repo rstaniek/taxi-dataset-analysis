@@ -58,9 +58,11 @@ def correlate():
     csvlink = Importer()
     crimes = csvlink.import_crime(path_to_crime)
     taxis = csvlink.import_taxi(path_to_taxi)
-    dist = Distance('d2000', 'd2000')
-    for x in range(3):
-        print(dist.get_taxis_per_crime(crimes[x], taxis))
+    dist = Distance('d200', 'd200')
+    for x in range(10):
+        k, v = dist.get_taxis_per_crime(crimes[x], taxis).popitem()
+        print('{}: {}'.format(k, len(v)))
+
 
     
 
