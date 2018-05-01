@@ -26,6 +26,8 @@ class Importer(object):
         latt = row[header.index('Latitude')]
         long = row[header.index('Longitude')]
         try:
+            if '.0' in commarea:
+                commarea = commarea[:2]
             c = CrimeRecord(id, date, int(commarea), latt, long)
         except Exception as ex:
             raise ModelException(ex)
@@ -226,7 +228,7 @@ class Distance(object):
         taxi_l = list()
 
         #first narrow down taxi list to certain date period
-        crime_time = datetime.datetime.strptime(crime.date, '%d/%m/%Y %I:%M:%S %p')
+        crime_time = datetime.datetime.strptime(crime.date, '%Y-%m-%d %H:%M:%S')
 
         #decoding time delta
         if 'd' in self.start_days:

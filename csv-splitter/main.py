@@ -53,15 +53,16 @@ def test():
 
 
 def correlate():
-    path_to_taxi = 'C:/Users/rajmu/Desktop/project-4/cleaned/taxi-2017Q3.csv'
-    path_to_crime = 'C:/Users/rajmu/Desktop/project-4/crime_dataset.csv'
+    path_to_taxi = 'C:/Users/rajmu/Desktop/project-4/cleaned/taxi-2013Q3.csv'
+    path_to_crime = 'C:/Users/rajmu/Desktop/project-4/Crimes_by_quarter/Crimes2013Q3.csv'
     csvlink = Importer()
     crimes = csvlink.import_crime(path_to_crime)
     taxis = csvlink.import_taxi(path_to_taxi)
-    dist = Distance('d200', 'd200')
+    dist = Distance('h1', 'd1')
     for x in range(10):
-        k, v = dist.get_taxis_per_crime(crimes[x], taxis).popitem()
-        print('{}: {}'.format(k, len(v)))
+        #k, v = dist.get_taxis_per_crime(crimes[x], taxis).popitem()
+        #print('{}: {}'.format(k, len(v)))
+        print(dist.get_taxis_per_crime(crimes[x], taxis))
 
 
     
