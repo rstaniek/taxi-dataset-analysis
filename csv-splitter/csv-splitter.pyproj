@@ -21,6 +21,9 @@
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="crime_splitter.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="datasets.py">
       <SubType>Code</SubType>
     </Compile>
