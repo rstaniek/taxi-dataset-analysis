@@ -5,16 +5,25 @@ class TaxiTrip(object):
         self.taxiID = taxiID
         self.tripStartTimestamp = tripStartTImestamp
         self.pickupCommunityArea = pickupCommunityArea
-        self.lattitude = lattitude
-        self.longitude = longitude
+        super.__init__(lattitude, longitude)
 
 
-
-class CrimeRecord(object):
+class CrimeRecord(Coordinate):
     def __init__(self, id, date, communityArea, lattitude, longitude):
         self.id = id
         self.date = date
         self.communityArea = communityArea
-        self.lattitude = lattitude
+        super.__init__(lattitude, longitude)
+
+
+class Coordinate(object):
+    def __init__(self, latitude, longitude):
+        self.latitude = latitude
         self.longitude = longitude
+
+
+    @property
+    def point(self):
+        return {'x' : self.latitude,
+                'y' : self.longitude}
 
