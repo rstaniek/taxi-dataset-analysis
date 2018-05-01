@@ -53,11 +53,13 @@ class Importer(object):
             reader = csv.reader(file)
 
             header = next(reader)
-            data = [x for x in reader]
+            data = list()#[x for x in reader]
+            for x in reader:
+                data.append(x)
             row_count = len(data)
             print('Loading completed. {} lines'.format(row_count))
             crimes = list()
-            bar_count = (int(row_count / 100) * 100) + 100
+            bar_count = (int(row_count / 1000) * 1000) + 1000
             bar = IncrementalBar('Modelling Crimes', max=bar_count, suffix='%(index)d/%(max)d - %(percent).1f%% - %(eta_td)s')
             for index, row in enumerate(data):
                 c = None
@@ -67,8 +69,8 @@ class Importer(object):
                     continue
                 if c is not None:
                     crimes.append(c)
-                if index % 100 == 0:
-                    bar.next(100)
+                if index % 1000 == 0:
+                    bar.next(1000)
             print('\nimport finished')
             return crimes
 
@@ -85,11 +87,13 @@ class Importer(object):
             header =list()
             for element in head:
                 header.append(element.replace('`',' '))
-            data = [x for x in reader]
+            data = list()#[x for x in reader]
+            for x in reader:
+                data.append(x)
             row_count = len(data)
             print('Loading completed. {} lines'.format(row_count))
             taxis = list()
-            bar_count = (int(row_count / 100) * 100) + 100
+            bar_count = (int(row_count / 1000) * 1000) + 1000
             bar = IncrementalBar('Modelling Taxi Trips', max=bar_count, suffix='%(index)d/%(max)d - %(percent).1f%% - %(eta_td)s')
             for index, row in enumerate(data):
                 t = None
@@ -99,8 +103,8 @@ class Importer(object):
                     continue
                 if t is not None:
                     taxis.append(t)
-                if index % 100 == 0:
-                    bar.next(100)
+                if index % 1000 == 0:
+                    bar.next(1000)
             print('\nimport finished')
             return taxis
 
@@ -225,16 +229,35 @@ class Distance(object):
 
         #first narrow down taxi list to certain date period
         crime_time = datetime.datetime.strptime(crime.date, '%d/%m/%Y %I:%M:%S %p')
-        date_start = crime_time - datetime.timedelta(hours=1)
-        date_end = crime_time + datetime.timedelta(hours=1)
+
+        #decoding time delta
+        if 'd' in self.start_days:
+            offset = int(self.start_days[1:])
+            date_start = crime_time - datetime.timedelta(days=offset)
+        elif 'h' in self.start_days:
+            offset = int(self.start_days[1:])
+            date_start = crime_time - datetime.timedelta(hours=offset)
+        else:
+            date_start = crime_time - datetime.timedelta(hours=1)
+        
+        if 'd' in self.stop_days:
+            offset = int(self.stop_days[1:])
+            date_end = crime_time + datetime.timedelta(days=offset)
+        elif 'h' in self.stop_days:
+            offset = int(self.stop_days[1:])
+            date_end = crime_time + datetime.timedelta(hours=offset)
+        else:
+            date_end = crime_time + datetime.timedelta(hours=1)
+
         final_taxi = list()
 
         #iterate through a taxi list
         for taxi in taxi_list:
             stamp_truncated = taxi.tripStartTimestamp[:-4]
-            taxi_date = datetime.datetime.strptime(stamp_truncated, '%d-%m-%Y %H:%M:%S')
+            taxi_date = datetime.datetime.strptime(stamp_truncated, '%Y-%m-%d %H:%M:%S')
             if taxi_date > date_start and taxi_date < date_end:
-                if int(taxi.pickupCommunityArea) in self.get_neighbours(crime.community_area):
+                neeeigh = Distance.neighbours[crime.community_area]
+                if int(taxi.pickupCommunityArea) in neeeigh:
                     if self.get_distance(crime, taxi) < Distance.MAX_DISTANCE:
                         final_taxi.append(taxi.trip_id)
 

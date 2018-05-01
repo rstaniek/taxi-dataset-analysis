@@ -48,11 +48,8 @@ def merge():
 def test():
 
     #debug
-    sort = DateSorter()
-    args = dict()
-    args['file'] = 'C:/Users/rajmu/Desktop/taxi-split/corrected/taxi_test.csv'
-    args['thread'] = 'main-1'
-    sort.split(args)
+    dist = Distance('h5', 'd3')
+    print(dist.neighbours[45])
 
 
 def correlate():
@@ -61,7 +58,7 @@ def correlate():
     csvlink = Importer()
     crimes = csvlink.import_crime(path_to_crime)
     taxis = csvlink.import_taxi(path_to_taxi)
-    dist = Distance(1,1)
+    dist = Distance('d2000', 'd2000')
     for x in range(3):
         print(dist.get_taxis_per_crime(crimes[x], taxis))
 
