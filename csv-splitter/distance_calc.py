@@ -64,7 +64,6 @@ class Importer(object):
                 try:
                     c = self.model_crime(header, row)
                 except ModelException as me:
-                    print(ex)
                     continue
                 if c is not None:
                     crimes.append(c)
@@ -97,7 +96,6 @@ class Importer(object):
                 try:
                     t = self.model_taxi(header, row)
                 except ModelException as me:
-                    print(me)
                     continue
                 if t is not None:
                     taxis.append(t)
@@ -233,7 +231,8 @@ class Distance(object):
 
         #iterate through a taxi list
         for taxi in taxi_list:
-            taxi_date = datetime.datetime.strptime(taxi.tripStartTimestamp, '%d-%m-%Y %H:%M:%S')
+            stamp_truncated = taxi.tripStartTimestamp[:-4]
+            taxi_date = datetime.datetime.strptime(stamp_truncated, '%d-%m-%Y %H:%M:%S')
             if taxi_date > date_start and taxi_date < date_end:
                 if int(taxi.pickupCommunityArea) in self.get_neighbours(crime.community_area):
                     if self.get_distance(crime, taxi) < Distance.MAX_DISTANCE:
