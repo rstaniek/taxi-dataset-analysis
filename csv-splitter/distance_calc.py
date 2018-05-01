@@ -6,6 +6,11 @@ import csv
 import math
 import datetime
 
+class ModelException(Exception):
+    def __init__(self, message, errors=None):
+        super(Exception, self).__init__(message)
+        self.errors = errors
+
 class Importer(object):
 
 
@@ -20,7 +25,11 @@ class Importer(object):
         commarea = row[header.index('Community Area')]
         latt = row[header.index('Latitude')]
         long = row[header.index('Longitude')]
-        return CrimeRecord(id, date, commarea, latt, long)
+        try:
+            c = CrimeRecord(id, date, int(commarea), latt, long)
+        except Exception as ex:
+            raise ModelException(ex)
+        return c
 
 
     def model_taxi(self, header, row):
@@ -29,7 +38,11 @@ class Importer(object):
         area = row[header.index('Pickup Community Area')]
         latt = row[header.index('Pickup Centroid Latitude')]
         long = row[header.index('Pickup Centroid Longitude')]
-        return TaxiTrip(trip_id, date, area, latt, long)
+        try:
+            t = TaxiTrip(trip_id, date, int(area), latt, long)
+        except Exception as ex:
+            raise ModelException(ex)
+        return t
 
 
     def import_crime(self, path):
@@ -47,7 +60,14 @@ class Importer(object):
             bar_count = (int(row_count / 100) * 100) + 100
             bar = IncrementalBar('Modelling Crimes', max=bar_count, suffix='%(index)d/%(max)d - %(percent).1f%% - %(eta_td)s')
             for index, row in enumerate(data):
-                crimes.append(self.model_crime(header, row))
+                c = None
+                try:
+                    c = self.model_crime(header, row)
+                except ModelException as me:
+                    print(ex)
+                    continue
+                if c is not None:
+                    crimes.append(c)
                 if index % 100 == 0:
                     bar.next(100)
             print('\nimport finished')
@@ -73,7 +93,14 @@ class Importer(object):
             bar_count = (int(row_count / 100) * 100) + 100
             bar = IncrementalBar('Modelling Taxi Trips', max=bar_count, suffix='%(index)d/%(max)d - %(percent).1f%% - %(eta_td)s')
             for index, row in enumerate(data):
-                taxis.append(self.model_taxi(header, row))
+                t = None
+                try:
+                    t = self.model_taxi(header, row)
+                except ModelException as me:
+                    print(me)
+                    continue
+                if t is not None:
+                    taxis.append(t)
                 if index % 100 == 0:
                     bar.next(100)
             print('\nimport finished')
@@ -199,7 +226,7 @@ class Distance(object):
         taxi_l = list()
 
         #first narrow down taxi list to certain date period
-        crime_time = datetime.datetime.strptime(crime.date, '%d/%m/%Y %H:%M:%S')
+        crime_time = datetime.datetime.strptime(crime.date, '%d/%m/%Y %I:%M:%S %p')
         date_start = crime_time - datetime.timedelta(hours=1)
         date_end = crime_time + datetime.timedelta(hours=1)
         final_taxi = list()
