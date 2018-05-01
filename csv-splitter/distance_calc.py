@@ -160,7 +160,7 @@ class Distance(object):
         return deg * (math.pi/180)
 
 
-    def get_distance(crime, taxi):
+    def get_distance(self, crime, taxi):
         x1 = crime.point['x']
         y1 = crime.point['y']
         x2 = taxi.point['x']
@@ -168,7 +168,7 @@ class Distance(object):
         dx = Distance.to_rad(x2-x1)
         dy = Distance.to_rad(y2-y1)
         R = 6371
-        a = math.sin(dx/2) * math.sin(dx/2) + math.cos(deg2rad(y1)) * math.cos(deg2rad(y2)) * math.sin(dy/2) * math.sin(dy/2)
+        a = math.sin(dx/2) * math.sin(dx/2) + math.cos(Distance.to_rad(y1)) * math.cos(Distance.to_rad(y2)) * math.sin(dy/2) * math.sin(dy/2)
         c = 2 * math.atan2(math.sqrt(a), math.sqrt(1-a))
         d = R * c
         return d
