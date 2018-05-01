@@ -3,6 +3,7 @@ from sorter import DateSorter
 import glob
 from merger import ReMerger
 from distance_calc import Importer, Distance
+from progress.bar import IncrementalBar
 
 def split():
     #Fetch a list of files from a directory
@@ -53,17 +54,23 @@ def test():
 
 
 def correlate():
-    path_to_taxi = 'C:/Users/rajmu/Desktop/project-4/cleaned/taxi-2013Q3.csv'
-    path_to_crime = 'C:/Users/rajmu/Desktop/project-4/Crimes_by_quarter/Crimes2013Q3.csv'
+    path_to_taxi = 'C:/Users/rajmu/Desktop/project-4/cleaned/taxi-2017Q3.csv'
+    path_to_crime = 'C:/Users/rajmu/Desktop/project-4/Crimes_by_quarter/Crimes2017Q3.csv'
     csvlink = Importer()
     crimes = csvlink.import_crime(path_to_crime)
     taxis = csvlink.import_taxi(path_to_taxi)
+    bar = IncrementalBar('Modelling Taxi Trips', max=len(crimes), suffix='%(index)d/%(max)d - %(percent).1f%% - %(eta_td)s')
     dist = Distance('h1', 'd1')
-    for x in range(10):
-        #k, v = dist.get_taxis_per_crime(crimes[x], taxis).popitem()
-        #print('{}: {}'.format(k, len(v)))
-        print(dist.get_taxis_per_crime(crimes[x], taxis))
 
+    result = list()
+    for crime in crimes:
+        k, v = dist.get_taxis_per_crime(crime, taxis).popitem()
+        result.append('{}: {}'.format(k, len(v)))
+        bar.next()
+
+        #print(dist.get_taxis_per_crime(crimes[x], taxis))
+    for x in result:
+        print(x)
 
     
 

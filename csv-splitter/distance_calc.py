@@ -19,6 +19,10 @@ class Importer(object):
         return cols
 
 
+    def partition(self, iterable, chunk_size=1000):
+        return [iterable[x:x+chunk_size] for x in range(0, len(iterable), chunk_size)]
+
+
     def model_crime(self, header, row):
         id = row[header.index('ID')]
         date = row[header.index('Date')]
@@ -262,5 +266,9 @@ class Distance(object):
                         final_taxi.append(taxi.trip_id)
 
         return {crime.id: final_taxi}
+
+    def run(self, crime_list, taxi_list):
+        pass
+        #TODO: to be implemented
 
 
