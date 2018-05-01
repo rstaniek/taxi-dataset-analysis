@@ -59,7 +59,7 @@ def correlate():
     path_to_taxi = 'C:/Users/rajmu/Desktop/project-4/cleaned/taxi-2017Q3.csv'
     path_to_crime = 'C:/Users/rajmu/Desktop/project-4/crime_dataset.csv'
     csvlink = Importer()
-    crimes = csvlink.model_crime(path_to_crime)
+    crimes = csvlink.import_crime(path_to_crime)
     taxis = csvlink.import_taxi(path_to_taxi)
     dist = Distance(1,1)
     for x in range(3):

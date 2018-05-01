@@ -36,7 +36,7 @@ class Importer(object):
         if path == '' or path is None:
             raise ValueError('Invalid path!')
         with open(path) as file:
-            print('loading crime csv...')
+            print('loading crime csv... from {}'.format(path))
             reader = csv.reader(file)
 
             header = next(reader)
@@ -58,7 +58,7 @@ class Importer(object):
         if path == '' or path is None:
             raise ValueError('Invalid path!')
         with open(path) as file:
-            print('loading taxi csv...')
+            print('loading taxi csv... from {}'.format(path))
             reader = csv.reader(file, delimiter=';', quotechar='"')
 
             head = next(reader)
