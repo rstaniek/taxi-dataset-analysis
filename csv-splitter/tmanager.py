@@ -130,7 +130,7 @@ class ThreadManager:
                     #pop a file from a stack and assign it to a process
                     file = self.file_stack.pop()
                     thread.set_file(file)
-                    print('File {} assigned to thread: {}'.format(file, thread.name))
+                    print('File assigned to thread: {}'.format(thread.name))
                 except ThreadRunException as ex:
                     print(ex)
                 #start the thread

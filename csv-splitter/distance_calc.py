@@ -5,6 +5,7 @@ from progress.bar import IncrementalBar
 import csv
 import math
 import datetime
+import time
 
 class ModelException(Exception):
     def __init__(self, message, errors=None):
@@ -265,10 +266,37 @@ class Distance(object):
                     if self.get_distance(crime, taxi) < self.MAX_DISTANCE():
                         final_taxi.append(taxi.trip_id)
 
-        return {crime.id: final_taxi}
+        return crime.id, final_taxi
 
-    def run(self, crime_list, taxi_list):
-        pass
-        #TODO: to be implemented
+    def __log__(self, message, thread=None):
+        if thread is None:
+            print('[{}] (CrimeDistCalc) {}'.format(str(datetime.datetime.now()), str(message)))
+        else:
+            print('[{}] (CrimeDistCalc) [Thread: {}] {}'.format(str(datetime.datetime.now()), str(thread), str(message)))
+
+
+    def run(self, arguments):
+        args = arguments['file']
+        crime_list = args['crime_list']
+        taxi_path = args['taxi_list']
+        out_path = args['out_path']
+        thread_name = arguments['thread']
+
+        loader = Importer()
+        taxi_list = loader.import_taxi(taxi_path)
+        #output_rows = list()
+        current = int(time.time())
+        with open(out_path.format('{}-{}'.format(current, thread_name)), 'w') as out_file:
+            self.__log__('Opening file... {}'.format(out_path.format('{}-{}'.format(current, thread_name))))
+            out_file.write('crime_id,taxi_id\n')
+            for crime in crime_list:
+                self.__log__('Analyzing crime [{}]'.format(crime.id), thread_name)
+                k, v = self.get_taxis_per_crime(crime, taxi_list)
+                self.__log__('Crime [{}] analyzed! {} taxi matches found!'.format(k, len(v)), thread_name)
+                if len(v) > 0:
+                    for taxi_id in v:
+                        out_file.write('{},{}\n'.format(k, taxi_id))
+        self.__log__('Operation finished for thread {}'.format(thread_name))
+
 
 

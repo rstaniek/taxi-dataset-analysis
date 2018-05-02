@@ -44,8 +44,6 @@ def merge():
     manager.run()
         
 
-
-
 def test():
 
     #debug
@@ -72,9 +70,33 @@ def correlate():
     for x in result:
         print(x)
 
+
+def correlate_threaded():
+    path_to_taxi = 'C:/Users/rajmu/Desktop/project-4/cleaned/taxi-2017Q3.csv'
+    path_to_crime = 'C:/Users/rajmu/Desktop/project-4/Crimes_by_quarter/Crimes2017Q3.csv'
+    out_path_template = 'C:/Users/rajmu/Desktop/project-4/correlation/2017Q3-{}.csv'
+    args = list()
+    loader = Importer()
+    crimes = loader.import_crime(path_to_crime)
+    crimes_partitioned = loader.partition(crimes)
+    taxis = loader.import_taxi(path_to_taxi)
+
+    for part in crimes_partitioned:
+        _dict = dict()
+        _dict['crime_list'] = part
+        _dict['taxi_list'] = taxis
+        _dict['out_path'] = out_path_template
+        args.append(_dict)
+
+    manager = tm.ThreadManager(args)
+    distance = Distance('h1', 'd2')
+    manager.set_method_to_invoke(distance.run)
+
+    manager.run()
+
     
 
 if __name__ == "__main__":
     #merge()
     #test()
-    correlate()
+    correlate_threaded()
