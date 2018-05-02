@@ -196,9 +196,11 @@ class Distance(object):
 	            76: [76,9,10,17],
 	            77: [77,1,2,3,4]}
 
-    def __init__(self, start_days, stop_days):
+    def __init__(self, start_days, start_hours, stop_days, stop_hours):
         self.start_days = start_days #string timestamp 'h1', 'd3'
         self.stop_days = stop_days
+        self.start_hours = start_hours 
+        self.stop_hours = stop_hours
 
 
     def MAX_DISTANCE(self):
@@ -235,24 +237,11 @@ class Distance(object):
         crime_time = datetime.datetime.strptime(crime.date, '%Y-%m-%d %H:%M:%S')
 
         #decoding time delta
-        if 'd' in self.start_days:
-            offset = int(self.start_days[1:])
-            date_start = crime_time - datetime.timedelta(days=offset)
-        elif 'h' in self.start_days:
-            offset = int(self.start_days[1:])
-            date_start = crime_time - datetime.timedelta(hours=offset)
-        else:
-            date_start = crime_time - datetime.timedelta(hours=1)
-        
-        if 'd' in self.stop_days:
-            offset = int(self.stop_days[1:])
-            date_end = crime_time + datetime.timedelta(days=offset)
-        elif 'h' in self.stop_days:
-            offset = int(self.stop_days[1:])
-            date_end = crime_time + datetime.timedelta(hours=offset)
-        else:
-            date_end = crime_time + datetime.timedelta(hours=1)
+        date_start = crime_time - datetime.timedelta(hours = self.start_hours, days = self.start_days)
+        date_end = crime_time + datetime.timedelta(hours = self.stop_hours, days = self.stop_days)
 
+
+        
         final_taxi = list()
 
         #iterate through a taxi list

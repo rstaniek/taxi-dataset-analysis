@@ -60,7 +60,7 @@ def correlate():
     crimes = csvlink.import_crime(path_to_crime)
     taxis = csvlink.import_taxi(path_to_taxi)
     bar = IncrementalBar('Modelling Taxi Trips', max=len(crimes), suffix='%(index)d/%(max)d - %(percent).1f%% - %(eta_td)s')
-    dist = Distance('h1', 'd1')
+    dist = Distance(0,1,1,0)
 
     result = list()
     for crime in crimes:
