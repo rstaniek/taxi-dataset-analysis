@@ -1,5 +1,6 @@
 import time
 import math
+import sys
 
 start = time.time()
 
@@ -128,6 +129,18 @@ def cock_buster():
     bop_index(100000)
 
 
+def divide_my_ass():
+    g = globals()
+    s = [i for i in range(0,100)]
+    t = []
+    for i in range(0,10):
+        t.append([j for j in range(1*10*i,(1+i)*10)])
+    print(str(sys.getsizeof(s)) + " 10000 items in a array")
+    print(str(sys.getsizeof(t)) + " 100 items in 100 arrays, nested")
+    print(str(sys.getsizeof([j for j in range(50,60)])) + " 100 items in 100 arrays, nested")
+    print(s)
+    print(t)
 
 #cunt_destroyer()
-cock_buster()
+#cock_buster()
+divide_my_ass()

@@ -60,8 +60,8 @@ def correlate():
     csvlink = Importer()
     crimes = csvlink.import_crime(path_to_crime)
     taxis = csvlink.import_taxi(path_to_taxi)
-    bar = IncrementalBar('Modelling Taxi Trips', max=len(crimes), suffix='%(index)d/%(max)d - %(percent).1f%% - %(eta_td)s')
-    dist = Distance(0,1,1,0)
+    bar = IncrementalBar('Analyzing crime data', max=len(crimes), suffix='%(index)d/%(max)d - %(percent).1f%% - %(eta_td)s')
+    dist = Distance(0,1,0,1)
 
     filtered_taxi_list = dist.generate_taxi_lists(taxis)
     #for i in range(1,78):
