@@ -5,6 +5,7 @@ from progress.bar import IncrementalBar
 import csv
 import math
 import datetime
+import time
 
 class ModelException(Exception):
     def __init__(self, message, errors=None):
@@ -195,13 +196,12 @@ class Distance(object):
 	            75: [75,49,53,72,73,74],
 	            76: [76,9,10,17],
 	            77: [77,1,2,3,4]}
-
+    
     def __init__(self, start_days, start_hours, stop_days, stop_hours):
         self.start_days = start_days #string timestamp 'h1', 'd3'
         self.stop_days = stop_days
         self.start_hours = start_hours 
         self.stop_hours = stop_hours
-
 
     def MAX_DISTANCE(self):
         return float(1.5) #km
@@ -255,7 +255,7 @@ class Distance(object):
 
         #iterate through a taxi list
         nbd = Distance.neighbours[crime.community_area]
-
+        
         for nb in nbd:
             for taxi in taxi_list[nb]:
                 stamp_truncated = taxi.tripStartTimestamp[:-4]

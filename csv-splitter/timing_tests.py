@@ -65,15 +65,69 @@ def run_me_daddy(x):
 #run_me_daddy(10000000)
 
 
-new_list = list()
-g = globals()
-for i in range(1,78):
-    g["taxi_com{0}".format(i)] = list()
-    new_list.append(g['taxi_com' + str(i)])
-x = list()
-x.append("asd")
-x.append(34)
+#new_list = list()
+#g = globals()
+#for i in range(1,78):
+#    g["taxi_com{0}".format(i)] = list()
+#    new_list.append(g['taxi_com' + str(i)])
+#x = list()
+#x.append("asd")
+#x.append(34)
 #g[taxi_com4][0] = x
 #print(g[taxi_com4])
-new_list[4].append(x)
-print(new_list)
+#new_list[4].append(x)
+#print(new_list)
+
+
+
+
+def gen_list(x):
+    start = time.time()
+    for i in range(0,x):
+        t = list()
+    print(str(time.time() - start) + " seconds for " + str(x) + " lists created")
+
+def gen_array(x):
+    start = time.time()
+    for i in range(0,x):
+        t = []
+    print(str(time.time() - start) + " seconds for " + str(x) + " arrays created\n")
+    
+
+def get_index(x):
+    start = time.time()
+    for i in range(20,x):
+        t = [i for i in range(0,1000)]
+        y = t.index(7)
+    print(str(time.time() - start) + " seconds for " + str(x) + " arrays created")
+   
+def bop_index(x):
+    start = time.time()
+    for i in range(20,x):
+        t = [i for i in range(0,1000)]
+        y = t[7]
+    print(str(time.time() - start) + " seconds for " + str(x) + " arrays created\n")
+ 
+
+def cunt_destroyer():
+    gen_list(10000)
+    gen_array(10000)
+    gen_list(100000)
+    gen_array(100000)
+    gen_list(1000000)
+    gen_array(1000000)
+    gen_list(10000000)
+    gen_array(10000000)
+
+def cock_buster():
+    get_index(1000)
+    bop_index(1000)
+    get_index(10000)
+    bop_index(10000)
+    get_index(100000)
+    bop_index(100000)
+
+
+
+#cunt_destroyer()
+cock_buster()

@@ -4,6 +4,7 @@ import glob
 from merger import ReMerger
 from distance_calc import Importer, Distance
 from progress.bar import IncrementalBar
+import time
 
 def split():
     #Fetch a list of files from a directory
@@ -71,15 +72,16 @@ def correlate():
     #print(len(filtered_taxi_list[32]))
     
     result = list()
-    for crime in crimes:
-        k, v = dist.get_taxis_per_crime(crime, filtered_taxi_list).popitem()
+    ts = time.time()
+    for i in range(0,43000,2000):
+        k, v = dist.get_taxis_per_crime(crimes[i], filtered_taxi_list).popitem()
         result.append('{}: {}'.format(k, len(v)))
         bar.next()
-
+    
         #print(dist.get_taxis_per_crime(crimes[x], taxis))
-    #for x in result:
-    #    print(x)
-
+    for x in result:
+        print(x)
+    print(str(time.time()-ts) + " seconds")
     
 
 if __name__ == "__main__":
