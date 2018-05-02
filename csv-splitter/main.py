@@ -62,15 +62,23 @@ def correlate():
     bar = IncrementalBar('Modelling Taxi Trips', max=len(crimes), suffix='%(index)d/%(max)d - %(percent).1f%% - %(eta_td)s')
     dist = Distance(0,1,1,0)
 
+    filtered_taxi_list = dist.generate_taxi_lists(taxis)
+    #for i in range(1,78):
+     #   print(len(filtered_taxi_list[i]))
+    #print(str(len(filtered_taxi_list[1])) + "yes")
+    #print(len(filtered_taxi_list[77]))
+    #print(len(filtered_taxi_list[8]))
+    #print(len(filtered_taxi_list[32]))
+    
     result = list()
     for crime in crimes:
-        k, v = dist.get_taxis_per_crime(crime, taxis).popitem()
+        k, v = dist.get_taxis_per_crime(crime, filtered_taxi_list).popitem()
         result.append('{}: {}'.format(k, len(v)))
         bar.next()
 
         #print(dist.get_taxis_per_crime(crimes[x], taxis))
-    for x in result:
-        print(x)
+    #for x in result:
+    #    print(x)
 
     
 

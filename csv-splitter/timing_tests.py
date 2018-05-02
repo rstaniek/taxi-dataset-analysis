@@ -56,10 +56,24 @@ def run_me_daddy(x):
     powsmol(x)
     squirt(x)
 
-run_me_daddy(1000)
-run_me_daddy(10000)
-run_me_daddy(100000)
-run_me_daddy(1000000)
-run_me_daddy(1000000)
-run_me_daddy(1000000)
-run_me_daddy(10000000)
+#run_me_daddy(1000)
+#run_me_daddy(10000)
+#run_me_daddy(100000)
+#run_me_daddy(1000000)
+#run_me_daddy(1000000)
+#run_me_daddy(1000000)
+#run_me_daddy(10000000)
+
+
+new_list = list()
+g = globals()
+for i in range(1,78):
+    g["taxi_com{0}".format(i)] = list()
+    new_list.append(g['taxi_com' + str(i)])
+x = list()
+x.append("asd")
+x.append(34)
+#g[taxi_com4][0] = x
+#print(g[taxi_com4])
+new_list[4].append(x)
+print(new_list)

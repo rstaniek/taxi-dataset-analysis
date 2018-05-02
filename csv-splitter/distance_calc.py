@@ -228,11 +228,20 @@ class Distance(object):
         c = 2 * math.atan2(math.sqrt(a), math.sqrt(1-a))
         d = R * c
         return d
-
+    
+    def generate_taxi_lists(self, big_taxis):
+        new_list = list()
+        g = globals()
+        for i in range(0,79):
+            g["taxi_com{0}".format(i)] = list()
+            new_list.append(g['taxi_com' + str(i)])
+        for taxi in big_taxis:
+            new_list[int(taxi.pickupCommunityArea)].append(taxi)
+        return new_list
 
     def get_taxis_per_crime(self, crime, taxi_list):
         taxi_l = list()
-
+        
         #first narrow down taxi list to certain date period
         crime_time = datetime.datetime.strptime(crime.date, '%Y-%m-%d %H:%M:%S')
 
@@ -245,14 +254,24 @@ class Distance(object):
         final_taxi = list()
 
         #iterate through a taxi list
-        for taxi in taxi_list:
-            stamp_truncated = taxi.tripStartTimestamp[:-4]
-            taxi_date = datetime.datetime.strptime(stamp_truncated, '%Y-%m-%d %H:%M:%S')
-            if taxi_date > date_start and taxi_date < date_end:
-                neeeigh = Distance.neighbours[crime.community_area]
-                if int(taxi.pickupCommunityArea) in neeeigh:
-                    if self.get_distance(crime, taxi) < self.MAX_DISTANCE():
+        nbd = Distance.neighbours[crime.community_area]
+
+        for nb in nbd:
+            for taxi in taxi_list[nb]:
+                stamp_truncated = taxi.tripStartTimestamp[:-4]
+                taxi_date = datetime.datetime.strptime(stamp_truncated, '%Y-%m-%d %H:%M:%S')
+                if taxi_date > date_start and taxi_date < date_end and self.get_distance(crime, taxi) < self.MAX_DISTANCE():
                         final_taxi.append(taxi.trip_id)
+        
+        
+        #for taxi in taxi_list:
+        #    stamp_truncated = taxi.tripStartTimestamp[:-4]
+        #    taxi_date = datetime.datetime.strptime(stamp_truncated, '%Y-%m-%d %H:%M:%S')
+        #    if taxi_date > date_start and taxi_date < date_end:
+        #        neeeigh = Distance.neighbours[crime.community_area]
+        #        if int(taxi.pickupCommunityArea) in neeeigh:
+        #            if self.get_distance(crime, taxi) < self.MAX_DISTANCE():
+        #                final_taxi.append(taxi.trip_id)
 
         return {crime.id: final_taxi}
 
