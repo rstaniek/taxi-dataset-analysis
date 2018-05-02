@@ -278,24 +278,26 @@ class Distance(object):
     def run(self, arguments):
         args = arguments['file']
         crime_list = args['crime_list']
-        taxi_path = args['taxi_list']
+        taxi_list = args['taxi_list']
         out_path = args['out_path']
         thread_name = arguments['thread']
 
-        loader = Importer()
-        taxi_list = loader.import_taxi(taxi_path)
-        #output_rows = list()
+        output_rows = list()
         current = int(time.time())
+
+        output_rows.append('crime_id,taxi_id')
+        for crime in crime_list:
+            self.__log__('Analyzing crime [{}]'.format(crime.id), thread_name)
+            k, v = self.get_taxis_per_crime(crime, taxi_list)
+            self.__log__('Crime [{}] analyzed! {} taxi matches found!'.format(k, len(v)), thread_name)
+            if len(v) > 0:
+                for taxi_id in v:
+                    output_rows.append('{},{}'.format(k, taxi_id))
+
         with open(out_path.format('{}-{}'.format(current, thread_name)), 'w') as out_file:
             self.__log__('Opening file... {}'.format(out_path.format('{}-{}'.format(current, thread_name))))
-            out_file.write('crime_id,taxi_id\n')
-            for crime in crime_list:
-                self.__log__('Analyzing crime [{}]'.format(crime.id), thread_name)
-                k, v = self.get_taxis_per_crime(crime, taxi_list)
-                self.__log__('Crime [{}] analyzed! {} taxi matches found!'.format(k, len(v)), thread_name)
-                if len(v) > 0:
-                    for taxi_id in v:
-                        out_file.write('{},{}\n'.format(k, taxi_id))
+            out_file.writelines(output_rows)
+            
         self.__log__('Operation finished for thread {}'.format(thread_name))
 
 
