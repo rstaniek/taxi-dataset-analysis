@@ -2,6 +2,7 @@ import threading
 import multiprocessing
 import time
 from datetime import datetime
+#from utils import Executable
 
 
 class ThreadRunException(Exception):
@@ -17,7 +18,7 @@ class ProcessThread(threading.Thread):
         self.name = name
         self.file = file
         self.callback = callback
-        self.method = None
+        self.executable = None
         self.method_args = None
 
 
@@ -30,7 +31,7 @@ class ProcessThread(threading.Thread):
 
 
     def method_set(self, value):
-        self.method = value
+        self.executable = value
 
 
     def method_args_set(self, kwargs):
@@ -42,8 +43,10 @@ class ProcessThread(threading.Thread):
             self.method_args = dict()
         self.method_args['file'] = self.file
         self.method_args['thread'] = self.name
+        #self.executable = self.executable.__class__.__init__(self.executable.__class__)
+        #self.executable = Executable()
         #execute the injected method with a parameters passed as a dictionary
-        self.method(self.method_args)
+        self.executable.run(self.method_args)
         #when the work is done
         self.callback(self.threadID)
 

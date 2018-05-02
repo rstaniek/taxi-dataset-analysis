@@ -4,6 +4,8 @@ import glob
 from merger import ReMerger
 from distance_calc import Importer, Distance
 from progress.bar import IncrementalBar
+from threadtest import ThreadTester
+
 
 def split():
     #Fetch a list of files from a directory
@@ -46,9 +48,10 @@ def merge():
 
 def test():
 
-    #debug
-    dist = Distance('h5', 'd3')
-    print(dist.neighbours[45])
+    args = [x for x in range(30, 100)]
+    manager = tm.ThreadManager(args)
+    manager.set_method_to_invoke(ThreadTester())
+    manager.run()
 
 
 def correlate():
@@ -98,5 +101,5 @@ def correlate_threaded():
 
 if __name__ == "__main__":
     #merge()
-    #test()
-    correlate_threaded()
+    test()
+    #correlate_threaded()

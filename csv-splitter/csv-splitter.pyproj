@@ -48,7 +48,13 @@
     <Compile Include="splitter.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="threadtest.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="tmanager.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="utils.py">
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>

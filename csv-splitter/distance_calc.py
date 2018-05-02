@@ -2,6 +2,7 @@ from datasets import CrimeRecord
 from datasets import TaxiTrip
 from tmanager import ThreadManager
 from progress.bar import IncrementalBar
+from utils import Executable
 import csv
 import math
 import datetime
