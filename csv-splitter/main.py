@@ -88,7 +88,7 @@ def correlate_threaded():
         _dict['out_path'] = out_path_template
         args.append(_dict)
 
-    manager = tm.ThreadManager(args, core_c=4)
+    manager = tm.ThreadManager(args)
     distance = Distance('h1', 'd2')
     manager.set_method_to_invoke(distance.run)
 
