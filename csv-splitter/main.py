@@ -54,8 +54,8 @@ def test():
 
 
 def correlate():
-    path_to_taxi = 'C:/Users/rajmu/Desktop/project-4/cleaned/taxi-2017Q3.csv'
-    path_to_crime = 'C:/Users/rajmu/Desktop/project-4/Crimes_by_quarter/Crimes2017Q3.csv'
+    path_to_taxi = 'C:/Users/1062085/Desktop/gudFiles/taxi-2017Q3.csv'
+    path_to_crime = 'C:/Users/1062085/Desktop/gudFiles/Crimes2017Q3.csv'
     csvlink = Importer()
     crimes = csvlink.import_crime(path_to_crime)
     taxis = csvlink.import_taxi(path_to_taxi)
