@@ -239,6 +239,16 @@ class Distance(object):
             new_list[int(taxi.pickupCommunityArea)].append(taxi)
         return new_list
 
+    def divide_into_days(self, taxi_list):
+        cc = [ [ [ [] for k in range(0,32) ] for j in range(0,3) ] for i in range(0, 78)] 
+
+        
+        for taxi in taxi_list:
+            start_day = datetime.datetime.strptime(taxi.tripStartTimestamp[:-4], '%Y-%m-%d %H:%M:%S')
+            cc[int(taxi.pickupCommunityArea)][start_day.month%3][start_day.day].append(taxi)
+
+        return cc        
+
     def get_taxis_per_crime(self, crime, taxi_list):
         taxi_l = list()
         
@@ -255,13 +265,17 @@ class Distance(object):
 
         #iterate through a taxi list
         nbd = Distance.neighbours[crime.community_area]
-        
+        day_start = date_start.day
+        day_end = date_start.day
+        month = date_start.month
         for nb in nbd:
-            for taxi in taxi_list[nb]:
-                stamp_truncated = taxi.tripStartTimestamp[:-4]
-                taxi_date = datetime.datetime.strptime(stamp_truncated, '%Y-%m-%d %H:%M:%S')
-                if taxi_date > date_start and taxi_date < date_end and self.get_distance(crime, taxi) < self.MAX_DISTANCE():
-                        final_taxi.append(taxi.trip_id)
+            #print("nb: {0}, month: {1}, day:{2}".format(nb, month, day_start))
+            for taxi in taxi_list[nb][month%3][day_start]:
+                #stamp_truncated = taxi.tripStartTimestamp[:-4]
+                #taxi_date = datetime.datetime.strptime(stamp_truncated, '%Y-%m-%d %H:%M:%S')
+                #if taxi_date > date_start and taxi_date < date_end and self.get_distance(crime, taxi) < self.MAX_DISTANCE():
+                if self.get_distance(crime, taxi) < self.MAX_DISTANCE():
+                    final_taxi.append(taxi.trip_id)
         
         
         #for taxi in taxi_list:

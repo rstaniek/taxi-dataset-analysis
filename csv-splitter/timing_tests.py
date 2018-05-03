@@ -1,6 +1,7 @@
 import time
 import math
 import sys
+import datetime
 
 start = time.time()
 
@@ -143,4 +144,63 @@ def divide_my_ass():
 
 #cunt_destroyer()
 #cock_buster()
-divide_my_ass()
+#divide_my_ass()
+def get_quarter_day(date):
+    dayss = {1: 31,
+             2: 29,
+             3: 31,
+             4: 30,
+             5: 31,
+             6: 30,
+             7: 31,
+             8: 31,
+             9: 30,
+             10: 31,
+             11: 30,
+             12: 31}
+    x = date
+    qd = 0
+    #x = datetime.date.today()
+    m = x.month
+    n = m
+    while m > 0:
+        if m // 3 > 0:
+            qd = qd + dayss[n]
+        m =  m // 3
+    qd = qd + x.day
+    return qd
+
+def nth_quarter_day(date):
+    q_size = { 1: 89, 2: 89, 3: 90,
+               4: 91, 5: 92, 6: 91,
+               7: 93, 8: 93, 9: 93,
+               10: 93, 11: 93, 12: 93}
+    new_year_day = datetime.datetime(year=date.year, month=1, day=1)
+    return ((date - new_year_day).days + 1) % q_size[date.month]
+
+#print(get_quarter_day(datetime.datetime.strptime('28-01-2018', '%d-%m-%Y')))
+#print(nth_quarter_day(datetime.datetime.strptime('01-01-2017', '%d-%m-%Y')))
+#print(nth_quarter_day(datetime.datetime.strptime('31-03-2017', '%d-%m-%Y')))
+#print(nth_quarter_day(datetime.datetime.strptime('01-04-2017', '%d-%m-%Y')))
+#print(nth_quarter_day(datetime.datetime.strptime('30-06-2017', '%d-%m-%Y')))
+#print(nth_quarter_day(datetime.datetime.strptime('01-07-2017', '%d-%m-%Y')))
+#print(nth_quarter_day(datetime.datetime.strptime('30-09-2017', '%d-%m-%Y')))
+#print(nth_quarter_day(datetime.datetime.strptime('01-10-2017', '%d-%m-%Y')))
+#print(nth_quarter_day(datetime.datetime.strptime('31-12-2017', '%d-%m-%Y')))
+
+x = ["muee"]
+y = ["muitsa"]
+z = ["ecstra mue"]
+
+y.append(x)
+z.append(y)
+
+
+#print (z)
+
+
+cartofel = [ [[[[i+j+k]for k in range(0,32)]] for j in range(0,3)] for i in range(0,5)]
+cc = [ [ [ [i+j+k] for k in range(0,32) ] for j in range(0,3) ] for i in range(0, 78)] 
+print (cc[0][0][0])
+
+

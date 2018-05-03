@@ -61,9 +61,12 @@ def correlate():
     crimes = csvlink.import_crime(path_to_crime)
     taxis = csvlink.import_taxi(path_to_taxi)
     bar = IncrementalBar('Analyzing crime data', max=len(crimes), suffix='%(index)d/%(max)d - %(percent).1f%% - %(eta_td)s')
-    dist = Distance(0,1,0,1)
+    dist = Distance(1,0,0,1)
 
-    filtered_taxi_list = dist.generate_taxi_lists(taxis)
+    print("starting day division </3")
+    filtered_taxi_list = dist.divide_into_days(taxis)
+    
+    print("finished day division <3")
     #for i in range(1,78):
      #   print(len(filtered_taxi_list[i]))
     #print(str(len(filtered_taxi_list[1])) + "yes")
@@ -73,14 +76,17 @@ def correlate():
     
     result = list()
     ts = time.time()
-    for i in range(0,43000,2000):
-        k, v = dist.get_taxis_per_crime(crimes[i], filtered_taxi_list).popitem()
+    for crime in crimes:
+        k, v = dist.get_taxis_per_crime(crime, filtered_taxi_list).popitem()
         result.append('{}: {}'.format(k, len(v)))
         bar.next()
     
         #print(dist.get_taxis_per_crime(crimes[x], taxis))
+        
+    f = open("bamboozle.txt", "w+")
+    
     for x in result:
-        print(x)
+        f.write(x + '\n')
     print(str(time.time()-ts) + " seconds")
     
 
