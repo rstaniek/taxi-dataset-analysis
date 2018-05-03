@@ -1,5 +1,6 @@
 import time
 from utils import Executable
+import sys
 
 class ThreadTester(Executable):
     def run(self, args):
@@ -34,5 +35,17 @@ class ThreadTester(Executable):
             return 1
         else:
             return self.__fib_slow(num - 1) + self.__fib_slow(num - 2)
+
+
+
+def main(args):
+    number = int(args[1])
+    t = ThreadTester()
+    result = t._ThreadTester__fib_slow(number)
+    print(result)
+
+
+if __name__ == "__main__":
+    main(sys.argv)
 
 
