@@ -44,12 +44,10 @@ def merge():
     #manager.set_iterable_args(quarters)
     manager.run()
 
-def correlate():
-    path_to_taxi = 'C:/Users/1062085/Desktop/gudFiles/taxi-2017Q3.csv'
-    path_to_crime = 'C:/Users/1062085/Desktop/gudFiles/Crimes2017Q3.csv'
+def correlate(crime_file, taxi_file, output_prefix):
     csvlink = Importer()
-    crimes = csvlink.import_crime(path_to_crime)
-    taxis = csvlink.import_taxi(path_to_taxi)
+    crimes = csvlink.import_crime(crime_file)
+    taxis = csvlink.import_taxi(taxi_file)
     bar = IncrementalBar('Analyzing crime data', max=len(crimes), suffix='%(index)d/%(max)d - %(percent).1f%% - %(eta_td)s')
     dist = Distance(1,0,1,0)# 1 day before, 1 day after
 
@@ -59,12 +57,17 @@ def correlate():
     
     result = list()
     ts = time.time()
-    dist.get_taxis_per_crime(crimes, filtered_taxi_list)
+    dist.get_taxis_per_crime(crimes, filtered_taxi_list, output_prefix)
     
     print("Quarter analyze done in " + str(time.time()-ts) + " seconds")
+
+
+
+def main(args):
+    correlate(args[1], args[2], args[3])
     
 
 if __name__ == "__main__":
     #merge()
     #test()
-    correlate()
+    main(sys.argv)

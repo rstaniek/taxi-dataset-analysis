@@ -230,23 +230,22 @@ class Distance(object):
         return d
 
     def divide_into_days(self, taxi_list):
-        cc = [ [ [ [] for k in range(0,32) ] for j in range(0,3) ] for i in range(0, 78)] 
-
-        
+        #cc[neighbourhood][month][day] -> list of taxis in specified day of the month in the neighbourhood
+        cc = [ [ [ [] for k in range(0,32) ] for j in range(0,3) ] for i in range(0, 78)]
         for taxi in taxi_list:
             start_day = datetime.datetime.strptime(taxi.tripStartTimestamp[:-4], '%Y-%m-%d %H:%M:%S')
             cc[int(taxi.pickupCommunityArea)][start_day.month%3][start_day.day].append(taxi)
 
         return cc        
 
-    def get_taxis_per_crime(self, crime_list, taxi_list):
+    def get_taxis_per_crime(self, crime_list, taxi_list, fname):
         
         #file streams
-        fpast = open("qpast.csv", "w")
+        fpast = open("{0}past.csv".format(fname), "w")
         fpast.write("CrimeID,TripID\n")
-        fpresent = open("qpres.csv", "w")
+        fpresent = open("{0}present.csv".format(fname), "w")
         fpresent.write("CrimeID,TripID\n")
-        ffuture = open("qfuture.csv", "w")
+        ffuture = open("{0}future.csv".format(fname), "w")
         ffuture.write("CrimeID,TripID\n")
         print("Starting crime analyzis")
         for crime in crime_list:
