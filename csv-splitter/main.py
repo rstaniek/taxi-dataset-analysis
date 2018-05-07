@@ -43,7 +43,6 @@ def merge():
     
     #manager.set_iterable_args(quarters)
     manager.run()
-        
 
 def correlate():
     path_to_taxi = 'C:/Users/1062085/Desktop/gudFiles/taxi-2017Q3.csv'
