@@ -44,7 +44,7 @@ def merge():
     #manager.set_iterable_args(quarters)
     manager.run()
 
-def correlate(crime_file, taxi_file, output_prefix):
+def correlate(crime_file, taxi_file, output_prefix, output_path):
     csvlink = Importer()
     crimes = csvlink.import_crime(crime_file)
     taxis = csvlink.import_taxi(taxi_file)
@@ -57,14 +57,15 @@ def correlate(crime_file, taxi_file, output_prefix):
     
     result = list()
     ts = time.time()
-    dist.get_taxis_per_crime(crimes, filtered_taxi_list, output_prefix)
+    dist.get_taxis_per_crime(crimes, filtered_taxi_list, output_prefix, output_path)
     
     print("Quarter analyze done in " + str(time.time()-ts) + " seconds")
 
 
 
 def main(args):
-    correlate(args[1], args[2], args[3])
+    correlate(args[1], args[2], args[3], args[4])
+    #crime files path, taxi files path, output prefix, output files path
     
 
 if __name__ == "__main__":

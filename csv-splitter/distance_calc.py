@@ -238,14 +238,14 @@ class Distance(object):
 
         return cc        
 
-    def get_taxis_per_crime(self, crime_list, taxi_list, fname):
+    def get_taxis_per_crime(self, crime_list, taxi_list, fname, output_path):
         
         #file streams
-        fpast = open("{0}past.csv".format(fname), "w")
+        fpast = open("{0}{1}past.csv".format(output_path, fname), "w")
         fpast.write("CrimeID,TripID\n")
-        fpresent = open("{0}present.csv".format(fname), "w")
+        fpresent = open("{0}{1}present.csv".format(output_path, fname), "w")
         fpresent.write("CrimeID,TripID\n")
-        ffuture = open("{0}future.csv".format(fname), "w")
+        ffuture = open("{0}{1}future.csv".format(output_path, fname), "w")
         ffuture.write("CrimeID,TripID\n")
         print("Starting crime analyzis")
         for crime in crime_list:
