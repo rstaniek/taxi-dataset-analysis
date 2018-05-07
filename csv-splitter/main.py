@@ -5,6 +5,7 @@ from merger import ReMerger
 from distance_calc import Importer, Distance
 from progress.bar import IncrementalBar
 import time
+import sys
 
 def split():
     #Fetch a list of files from a directory
