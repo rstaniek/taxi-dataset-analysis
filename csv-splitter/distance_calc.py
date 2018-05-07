@@ -260,7 +260,6 @@ class Distance(object):
             date_future = crime_time + datetime.timedelta(hours = self.stop_hours, days = self.stop_days)
             day_future = date_future.day
             month_future = date_future.month
-
             
             #get neighbours
             nbd = Distance.neighbours[crime.community_area]

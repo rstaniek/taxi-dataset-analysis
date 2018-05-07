@@ -45,15 +45,6 @@ def merge():
     manager.run()
         
 
-
-
-def test():
-
-    #debug
-    dist = Distance('h5', 'd3')
-    print(dist.neighbours[45])
-
-
 def correlate():
     path_to_taxi = 'C:/Users/1062085/Desktop/gudFiles/taxi-2017Q3.csv'
     path_to_crime = 'C:/Users/1062085/Desktop/gudFiles/Crimes2017Q3.csv'
