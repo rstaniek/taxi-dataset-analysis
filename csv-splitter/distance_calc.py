@@ -198,7 +198,7 @@ class Distance(object):
 	            77: [77,1,2,3,4]}
     
     def __init__(self, start_days, start_hours, stop_days, stop_hours):
-        self.start_days = start_days #string timestamp 'h1', 'd3'
+        self.start_days = start_days #int
         self.stop_days = stop_days
         self.start_hours = start_hours 
         self.stop_hours = stop_hours
@@ -228,16 +228,6 @@ class Distance(object):
         c = 2 * math.atan2(math.sqrt(a), math.sqrt(1-a))
         d = R * c
         return d
-    
-    def generate_taxi_lists(self, big_taxis):
-        new_list = list()
-        g = globals()
-        for i in range(0,79):
-            g["taxi_com{0}".format(i)] = list()
-            new_list.append(g['taxi_com' + str(i)])
-        for taxi in big_taxis:
-            new_list[int(taxi.pickupCommunityArea)].append(taxi)
-        return new_list
 
     def divide_into_days(self, taxi_list):
         cc = [ [ [ [] for k in range(0,32) ] for j in range(0,3) ] for i in range(0, 78)] 
@@ -249,45 +239,51 @@ class Distance(object):
 
         return cc        
 
-    def get_taxis_per_crime(self, crime, taxi_list):
-        taxi_l = list()
+    def get_taxis_per_crime(self, crime_list, taxi_list):
         
-        #first narrow down taxi list to certain date period
-        crime_time = datetime.datetime.strptime(crime.date, '%Y-%m-%d %H:%M:%S')
+        #file streams
+        fpast = open("qpast.csv", "w")
+        fpast.write("CrimeID,TripID\n")
+        fpresent = open("qpres.csv", "w")
+        fpresent.write("CrimeID,TripID\n")
+        ffuture = open("qfuture.csv", "w")
+        ffuture.write("CrimeID,TripID\n")
+        print("Starting crime analyzis")
+        for crime in crime_list:
+            #crime date
+            crime_time = datetime.datetime.strptime(crime.date, '%Y-%m-%d %H:%M:%S')
+            #past date
+            date_past = crime_time - datetime.timedelta(hours = self.start_hours, days = self.start_days)
+            day_past = date_past.day
+            month_past = date_past.month
+            #future date
+            date_future = crime_time + datetime.timedelta(hours = self.stop_hours, days = self.stop_days)
+            day_future = date_future.day
+            month_future = date_future.month
 
-        #decoding time delta
-        date_start = crime_time - datetime.timedelta(hours = self.start_hours, days = self.start_days)
-        date_end = crime_time + datetime.timedelta(hours = self.stop_hours, days = self.stop_days)
+            
+            #get neighbours
+            nbd = Distance.neighbours[crime.community_area]
+            #iterate thru neighbours on extra filtered taxis
+            for nb in nbd:
+                #check past day
+                for taxi in taxi_list[nb][month_past%3][day_past]:
+                    if self.get_distance(crime, taxi) < self.MAX_DISTANCE():
+                        fpast.write(crime.id + ',' + taxi.trip_id + '\n')
+                #check crime day
+                for taxi in taxi_list[nb][crime_time.month%3][crime_time.day]:
+                    if self.get_distance(crime, taxi) < self.MAX_DISTANCE():
+                        fpresent.write(crime.id + ',' + taxi.trip_id + '\n')
+                #check future day
+                for taxi in taxi_list[nb][month_future%3][day_future]:
+                    if self.get_distance(crime, taxi) < self.MAX_DISTANCE():
+                        ffuture.write(crime.id + ',' + taxi.trip_id + '\n')
 
 
-        
-        final_taxi = list()
-
-        #iterate through a taxi list
-        nbd = Distance.neighbours[crime.community_area]
-        day_start = date_start.day
-        day_end = date_start.day
-        month = date_start.month
-        for nb in nbd:
-            #print("nb: {0}, month: {1}, day:{2}".format(nb, month, day_start))
-            for taxi in taxi_list[nb][month%3][day_start]:
-                #stamp_truncated = taxi.tripStartTimestamp[:-4]
-                #taxi_date = datetime.datetime.strptime(stamp_truncated, '%Y-%m-%d %H:%M:%S')
-                #if taxi_date > date_start and taxi_date < date_end and self.get_distance(crime, taxi) < self.MAX_DISTANCE():
-                if self.get_distance(crime, taxi) < self.MAX_DISTANCE():
-                    final_taxi.append(taxi.trip_id)
-        
-        
-        #for taxi in taxi_list:
-        #    stamp_truncated = taxi.tripStartTimestamp[:-4]
-        #    taxi_date = datetime.datetime.strptime(stamp_truncated, '%Y-%m-%d %H:%M:%S')
-        #    if taxi_date > date_start and taxi_date < date_end:
-        #        neeeigh = Distance.neighbours[crime.community_area]
-        #        if int(taxi.pickupCommunityArea) in neeeigh:
-        #            if self.get_distance(crime, taxi) < self.MAX_DISTANCE():
-        #                final_taxi.append(taxi.trip_id)
-
-        return {crime.id: final_taxi}
+        #pls always close ur files <3
+        fpast.close()
+        fpresent.close()
+        ffuture.close()
 
     def run(self, crime_list, taxi_list):
         pass

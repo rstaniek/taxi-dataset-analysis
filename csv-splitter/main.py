@@ -61,33 +61,17 @@ def correlate():
     crimes = csvlink.import_crime(path_to_crime)
     taxis = csvlink.import_taxi(path_to_taxi)
     bar = IncrementalBar('Analyzing crime data', max=len(crimes), suffix='%(index)d/%(max)d - %(percent).1f%% - %(eta_td)s')
-    dist = Distance(1,0,0,1)
+    dist = Distance(1,0,1,0)# 1 day before, 1 day after
 
-    print("starting day division </3")
+    print("Creating multi dimensional taxi array")
     filtered_taxi_list = dist.divide_into_days(taxis)
-    
-    print("finished day division <3")
-    #for i in range(1,78):
-     #   print(len(filtered_taxi_list[i]))
-    #print(str(len(filtered_taxi_list[1])) + "yes")
-    #print(len(filtered_taxi_list[77]))
-    #print(len(filtered_taxi_list[8]))
-    #print(len(filtered_taxi_list[32]))
+    print("Array created")
     
     result = list()
     ts = time.time()
-    for crime in crimes:
-        k, v = dist.get_taxis_per_crime(crime, filtered_taxi_list).popitem()
-        result.append('{}: {}'.format(k, len(v)))
-        bar.next()
+    dist.get_taxis_per_crime(crimes, filtered_taxi_list)
     
-        #print(dist.get_taxis_per_crime(crimes[x], taxis))
-        
-    f = open("bamboozle.txt", "w+")
-    
-    for x in result:
-        f.write(x + '\n')
-    print(str(time.time()-ts) + " seconds")
+    print("Quarter analyze done in " + str(time.time()-ts) + " seconds")
     
 
 if __name__ == "__main__":

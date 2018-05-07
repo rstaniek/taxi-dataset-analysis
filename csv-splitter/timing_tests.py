@@ -201,6 +201,17 @@ z.append(y)
 
 cartofel = [ [[[[i+j+k]for k in range(0,32)]] for j in range(0,3)] for i in range(0,5)]
 cc = [ [ [ [i+j+k] for k in range(0,32) ] for j in range(0,3) ] for i in range(0, 78)] 
-print (cc[0][0][0])
+#print (cc[0][0][0])
+
+def file_len(fname):
+    with open(fname) as f:
+        for i, l in enumerate(f):
+            pass
+    return i + 1
+
+print("Past: " + str(file_len("qpast.csv")) + " lines")
+print("Present: " + str(file_len("qpres.csv")) + " lines")
+print("Future: " + str(file_len("qfuture.csv")) + " lines")
+
 
 
