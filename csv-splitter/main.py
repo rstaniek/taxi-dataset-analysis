@@ -97,9 +97,18 @@ def correlate_threaded():
 
     manager.run()
 
+
+def split_crime():
+    path = 'C:/Users/rajmu/Desktop/project-4/crimes_only_significant_types.csv'
+    from crime_splitter import CrimeSplitter
+    splitter = CrimeSplitter()
+    args = {'file': path}
+    splitter.split(args)
+
     
 
 if __name__ == "__main__":
     #merge()
-    test()
+    #test()
     #correlate_threaded()
+    split_crime()

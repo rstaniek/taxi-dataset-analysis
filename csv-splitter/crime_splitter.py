@@ -14,9 +14,10 @@ class CrimeSplitter:
             path = args['file']
         else:
             pass
+        thread_name = 'local'
 
         self.__log__('Loading data frame {} '.format(path))
-        df = pd.read_csv(path, sep=",")
+        df = pd.read_csv(path, sep=";")
         out_path = '%s-{}.csv' % path[:path.find('.')]
         out_path ='{}/crimes_by_quarter/{}'.format(out_path[:out_path.rfind('/')], out_path[out_path.rfind('/') + 1:])
         self.__log__('Data frame loaded. [{}]'.format(thread_name))
@@ -25,7 +26,7 @@ class CrimeSplitter:
         self.__log__('Reformating date formats... ')
         start_time = time.time()
         
-        df['Date'] = pd.to_datetime(df['Date'], format = '%d/%m/%Y %I:%M:%S %p', dayfirst=True)
+        df['Date'] = pd.to_datetime(df['Date'], format = '%Y-%m-%d %H:%M:%S,000', dayfirst=True)
         
         elapsed_time = time.time() - start_time
         time_str = time.strftime('%H:%M:%S', time.gmtime(elapsed_time))
