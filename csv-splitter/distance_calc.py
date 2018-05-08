@@ -59,7 +59,12 @@ class Importer(object):
             print('loading crime csv... from {}'.format(path))
             reader = csv.reader(file)
 
-            header = next(reader)
+            head = next(reader)
+            header = list()
+            for element in head:
+                header.append(element.replace('`',' '))
+
+
             data = list()#[x for x in reader]
             for x in reader:
                 data.append(x)
@@ -250,7 +255,7 @@ class Distance(object):
         print("Starting crime analyzis")
         for crime in crime_list:
             #crime date
-            crime_time = datetime.datetime.strptime(crime.date, '%Y-%m-%d %H:%M:%S')
+            crime_time = datetime.datetime.strptime(crime.date, '%Y-%m-%d')
             #past date
             date_past = crime_time - datetime.timedelta(hours = self.start_hours, days = self.start_days)
             day_past = date_past.day
