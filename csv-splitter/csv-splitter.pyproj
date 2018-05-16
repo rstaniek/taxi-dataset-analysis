@@ -4,7 +4,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>a4975410-b740-4a1a-9a8e-baa2f1a7455a</ProjectGuid>
     <ProjectHome>.</ProjectHome>
-    <StartupFile>main.py</StartupFile>
+    <StartupFile>scikit_network.py</StartupFile>
     <SearchPath>
     </SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
@@ -40,6 +40,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="merger.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="scikit_network.py">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="sorter.py">

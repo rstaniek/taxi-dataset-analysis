@@ -65,8 +65,14 @@ def correlate(crime_file, taxi_file, output_prefix, output_path):
 
 
 def main(args):
-    correlate(args[1], args[2], args[3], args[4])
+    #correlate(args[1], args[2], args[3], args[4])
     #crime files path, taxi files path, output prefix, output files path
+
+    a1 = 'C:/Users/rajmu/Desktop/project-4/Crimes_by_quarter/crimes_only_significant_types-2013Q3.csv'
+    a2 = 'C:/Users/rajmu/Desktop/project-4/cleaned/taxi-2013Q3.csv'
+    a3 = '2013Q3'
+    a4 = 'C:/Users/rajmu/Desktop/project-4/correlation/'
+    correlate(a1,a2,a3,a4)
     
 
 if __name__ == "__main__":
