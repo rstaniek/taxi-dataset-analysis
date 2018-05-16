@@ -13,15 +13,20 @@ from sklearn.discriminant_analysis import LinearDiscriminantAnalysis
 from sklearn.naive_bayes import GaussianNB
 from sklearn.svm import SVC
 import csv
+from datetime import datetime
 
 
 class Program:
-    url = "C:/Users/rajmu/Desktop/project-4/crimes_ML_ready.csv"
+    url = "C:/Users/rajmu/Desktop/project-4/crimes_ML_ready_new.csv"
     validation_size = -1
     seed = -1
 
-    def __init__(self):
+    def __init__(self, test_size, seed):
+        print('Loading dataset...')
+        self.test_size = test_size
+        self.network_seed = seed
         self.dataset = pandas.read_csv(Program.url, sep=';', low_memory=False)
+        print('Dataset loadded. Formatting...')
         cols = list()
         cols = self.dataset.columns.values.tolist()
         cols = cols[:12] + cols[32:] + cols[13:32]
@@ -42,6 +47,7 @@ class Program:
         print(len(self.dataset.axes[0]))
         self.dataset = self.dataset.dropna()
         print(len(self.dataset.axes[0]))
+        print('Dataset initialized successfully!')
 
     def info(self):
         print(self.dataset.shape)
@@ -71,9 +77,9 @@ class Program:
         array = self.dataset.values
         X = array[:, :39]
         Y = array[:, 39:]
-        Program.validation_size = 0.9
-        Program.seed = 7
-        return model_selection.train_test_split(X, Y, test_size=Program.validation_size, random_state=Program.seed)
+        Program.validation_size = 0.00001
+        Program.seed = 12
+        return model_selection.train_test_split(X, Y, test_size=self.test_size, random_state=self.network_seed)
 
     def test_models(self):
         X_train, X_validation, Y_train, Y_validation = Program.__split_validation_dataset(self)
@@ -104,21 +110,51 @@ class Program:
         plt.show()
 
     def predict_with_knn(self):
+        print('Starting KNN prediction model...')
         knn = KNeighborsClassifier()
         x_train, x_validation, y_train, y_validation = Program.__split_validation_dataset(self)
         knn.fit(x_train, y_train)
+        print('Model initialized. Predicting...')
         predictions = knn.predict(x_validation)
-        print(accuracy_score(y_validation, predictions))
-        print(confusion_matrix(y_validation, predictions))
+        accuracy = accuracy_score(y_validation, predictions)
+        print('Prediction complete!')
+        #print(confusion_matrix(y_validation, predictions))
         print(classification_report(y_validation, predictions))
+        return accuracy, self.test_size, 'KNeighborsClassifier'
+
+
+    def predict_with_decision_tree(self):
+        print('Starting Decision Tree prediction model...')
+        dt = DecisionTreeClassifier()
+        x_train, x_validation, y_train, y_validation = Program.__split_validation_dataset(self)
+        dt.fit(x_train, y_train)
+        prediction = dt.predict(x_validation)
+        accuracy = accuracy_score(y_validation, prediction)
+        print('Prediction complete!')
+        print(classification_report(y_validation, prediction))
+        return accuracy, self.test_size, 'DecisionTreeClassifier'
 
 
 def main():
-    p = Program()
+    p = Program(0.2, 7)
     print(p.dataset.describe())
-    #p.test_models()
-    p.predict_with_knn()
-    p.show_histogram()
+    
+    test_sizes = [0.9, 0.8, 0.5, 0.4, 0.2, 0.1, 0.05, 0.01, 0.001, 0.0001, 0.00001, 0.000001]
+    results = list()
+    for size in test_sizes:
+        p.test_size = size
+        acc, ts, cls = p.predict_with_decision_tree()
+        results.append('[{}] f1: {}; test size: {}; method: {}'.format(datetime.now(), acc, ts, cls))
+        print(results[-1])
+        acc, ts, cls = p.predict_with_knn()
+        results.append('[{}] f1: {}; test size: {}; method: {}'.format(datetime.now(), acc, ts, cls))
+        print(results[-1])
+    
+    print('Test completed! Saving to file...')
+    with open('network-results.txt', 'a') as file:
+        for result in results:
+            file.write('{}\n'.format(result))
+    print('Results saved!')
 
 
 if __name__ == "__main__":
